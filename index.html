@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Mahasiswa | Aulia</title>
+    <style>
+        /* --- RESET & BASE --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        html {
+            /* Efek Magnet: Layar akan otomatis terkunci di setiap section */
+            scroll-snap-type: y mandatory;
+        }
+
+        body {
+            background-color: #fdfafb;
+            color: #4a4a4a;
+            overflow-x: hidden;
+        }
+
+        /* --- HIASAN LINGKARAN (DEKORASI) --- */
+        .bg-decoration {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 143, 171, 0.25) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(60px);
+            pointer-events: none;
+        }
+        .decor-1 { top: -100px; left: -100px; }
+        .decor-2 { bottom: -100px; right: -100px; }
+
+        /* --- PROGRESS BAR ATAS --- */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 4px;
+            z-index: 2000;
+        }
+        .progress-bar { height: 4px; background: #cf375d; width: 0%; }
+
+        /* --- NAVIGASI --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .logo { font-weight: bold; color: #ff8fab; font-size: 1.2rem; }
+        nav ul { display: flex; list-style: none; }
+        nav ul li { margin-left: 30px; }
+        nav ul li a { 
+            text-decoration: none; 
+            color: #666; 
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        nav ul li a:hover { color: #ff8fab; }
+
+        /* --- SECTION SETTINGS (MAGNET) --- */
+        section {
+            height: 100vh; /* Satu layar penuh */
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 10%;
+            flex-direction: column;
+            scroll-snap-align: start; /* Titik magnet */
+            scroll-snap-stop: always;
+            background-color: transparent; /* Agar hiasan lingkaran terlihat */
+        }
+
+        /* --- HERO SECTION --- */
+        .hero { text-align: center; }
+        .profile-img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            box-shadow: 0 10px 25px rgba(255, 143, 171, 0.3);
+            margin-bottom: 25px;
+        }
+        h1 { font-size: 3.5rem; color: #333; margin-bottom: 10px; }
+        .hero p { font-size: 1.3rem; color: #888; margin-bottom: 30px; }
+
+        /* --- ABOUT CONTENT --- */
+        /* Container Utama: Memastikan teks dan foto punya ruang masing-masing */
+        .about-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Memberi jarak maksimal antara teks dan foto */
+            gap: 60px; /* Jarak aman agar tidak mepet */
+            max-width: 1200px; /* Diperlebar sedikit agar lebih lega */
+            width: 100%
+        }
+        /* Bagian Teks: Kita paksa supaya dia mengambil 65% lebar layar */
+        .about-text {
+            flex: 0 0 60%; /* Teks tetap lebar 60%, tidak akan menciut */
+            text-align: left;
+        }
+
+        .about-text p {
+            font-size: 1.15rem; 
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        /* Bagian Foto: Kita batasi lebarnya agar tidak serakah tempat */
+        .photo-stack {
+            position: relative;
+            width: 320px; /* Lebar wadah foto dikunci */
+            height: 450px;
+            flex: 0 0 auto; /* Mencegah area foto melebar ke arah teks */
+        }
+        
+        .photo-stack img {
+            position: absolute;
+            width: 280px; /* Ukuran foto landscape seragam */
+            height: 160px;
+            object-fit: cover;
+            border-radius: 15px;
+            border: 4px solid white;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        /* Penempatan Zig-zag */
+        .img-1 { top: 0; left: 0; z-index: 3; }
+        .img-2 { top: 150px; left: 50px; z-index: 2; }
+        .img-3 { top: 300px; left: 10px; z-index: 1; }
+
+        /* EFEK GERAK SAAT KURSOR MENDEKAT */
+        .photo-stack:hover .img-1 {
+            transform: translate(-15px, -10px) rotate(-5deg);
+            box-shadow: 0 15px 30px rgba(255, 143, 171, 0.3);
+        }
+
+        .photo-stack:hover .img-2 {
+            transform: translate(20px, 0px) rotate(3deg);
+            box-shadow: 0 15px 30px rgba(255, 143, 171, 0.3);
+        }
+
+        .photo-stack:hover .img-3 {
+            transform: translate(-10px, 15px) rotate(-2deg);
+            box-shadow: 0 15px 30px rgba(255, 143, 171, 0.3);
+        }
+
+        /* Foto yang ditunjuk langsung akan membesar */
+        .photo-stack img:hover {
+            transform: scale(1.1) !important;
+            z-index: 10 !important;
+        }
+
+        /* --- CARD SYSTEM --- */
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1100px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(5px);
+            padding: 30px;
+            border-radius: 25px;
+            text-align: center;
+            border: 1px solid #eee;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s forwards;
+        }
+
+        /* Hover Effect: Kotak naik & ada shadow pink */
+        .card:hover { 
+            border-color: #ff8fab; 
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 143, 171, 0.2);
+            background-color: white;
+        }
+
+        .card h3 { color: #ff8fab; margin-bottom: 10px; }
+
+        /* --- BUTTONS --- */
+        .btn {
+            padding: 12px 30px;
+            background-color: #ff8fab;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: 0.3s;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(209, 39, 82, 0.4);
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover { background-color: #fb6f92; transform: translateY(-3px); }
+
+        .btn-disabled {
+            margin-top: 30px;
+            background-color: #eee !important;
+            color: #aaa !important;
+            cursor: default;
+            pointer-events: none;
+            box-shadow: none !important;
+        }
+
+        /* --- ANIMATION --- */
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .card:nth-child(1) { animation-delay: 0.2s; }
+        .card:nth-child(2) { animation-delay: 0.4s; }
+        .card:nth-child(3) { animation-delay: 0.6s; }
+        .card:nth-child(4) { animation-delay: 0.8s; }
+        .card:nth-child(5) { animation-delay: 1s; }
+
+        footer { padding: 40px; text-align: center; color: #888; background: white; }
+
+        @media (max-width: 768px) {
+            .about-content { flex-direction: column; text-align: center; }
+            h1 { font-size: 2.5rem; }
+        }
+
+        .quote-card {
+            background: transparent;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            border-left: 3px solid #ff8fab;
+            transition: 0.3s;
+        }
+
+        .quote-text {
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px !important;
+        }
+
+        .quote-author {
+            font-weight: bold;
+            color: #ff8fab;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .quote-card:hover {
+            transform: translateX(10px);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-decoration decor-1"></div>
+    <div class="bg-decoration decor-2"></div>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="myBar"></div>
+    </div>
+
+    <nav>
+        <div class="logo">AULIA.</div>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#hobby">Hobby</a></li>
+        </ul>
+    </nav>
+
+    <section id="home" class="hero">
+        <img src="aulia.jpeg" alt="Foto Profil" class="profile-img">
+        <h1>Aulia Nurul Afiza</h1>
+        <p>Mahasiswa Sistem Informasi</p>
+        <a href="#about" class="btn">Ayo Berkenalan!</a>
+    </section>
+
+    <section id="about">
+    <div class="about-content">
+        <div class="about-text">
+            <h2>Tentang Saya</h2>
+            <p>Halo Guys! Saya Aulia Nurul Afiza, mahasiswi semester awal yang memiliki ketertarikan besar di dunia teknologi dan data. Saat ini saya sedang menempuh pendidikan S1 Sistem Informasi di Universitas Internasional Batam.</p>
+            <p>Saya lahir di Batam pada 11 Juni 2007. Yaps.. saya 18 tahun sekarang hihi.</p>
+            <a href="#hobby" class="btn">Lihat Hobiku</a>
+        </div>
+
+        <div class="photo-stack">
+            <img src="ul.jpeg" class="img-1" alt="Foto Aulia 1">
+            <img src="aulaulia.jpeg" class="img-2" alt="Foto Aulia 2">
+            <img src="aulaul.jpeg" class="img-3" alt="Foto Aulia 3">
+        </div>
+    </section>
+
+    <section id="hobby">
+        <h2 style="color: #ff8fab; font-size: 2.8rem; margin-bottom: 10px;">What I Love.</h2>
+        <div class="cards-container">
+            <div class="card">
+                <h3>Coding</h3>
+                <p>Belajar membuat website yang estetik.</p>
+            </div>
+            <div class="card">
+                <h3>Membaca</h3>
+                <p>Saya suka membaca buku sejenis novel dan komik.</p>
+            </div>
+            <div class="card">
+                <h3>Travelling</h3>
+                <p>Saya suka sekali mengunjungi tempat baru.</p>
+            </div>
+            <div class="card">
+                <h3>Menonton</h3>
+                <p>Paling suka film yang genrenya action.</p>
+            </div>
+            <div class="card">
+                <h3>Mendengarkan Musik</h3>
+                <p>Suka dengerin semua genre musik hihi.</p>
+            </div>
+            <div class="card">
+                <h3>Makan</h3>
+                <p>Suka makanan yang unik. Terutama Seafood ❤️</p>
+            </div>
+            <div class="quote-card">
+                <p class="quote-text">"There are two paths you can take. Yours, or the path other choose for you."</p>
+                <span class="quote-author">— Enola Holmes</span>
+            </div>
+        </div>
+        <button class="btn btn-disabled">❤️ Terima Kasih Sudah Berkunjung! ❤️</button>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Aulia Nurul Afiza. Dibuat dengan ❤️</p>
+    </footer>
+
+    <script>
+        // Fungsi Progress Bar
+        window.onscroll = function() {
+            var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            var scrolled = (winScroll / height) * 100;
+            document.getElementById("myBar").style.width = scrolled + "%";
+        };
+    </script>
+</body>
+</html>
