@@ -167,11 +167,13 @@
 
         /* Teks di bagian bawah polaroid */
         .polaroid-text {
-            text-align: center;
-            font-family: 'Brush Script MT', cursive; /* Tulisan tangan */
+            display: block;          /* Memastikan teks mengambil ruang satu baris penuh */
+            width: 100%;             /* Memastikan lebar teks memenuhi area bingkai */
+            text-align: center;      /* Menaruh teks tepat di tengah secara horizontal */
+            font-family: 'Brush Script MT', cursive;
             font-size: 1.3rem;
             color: #ff8fab;
-            margin-top: 10px;
+            margin-top: 15px;        /* Memberi jarak yang pas dari foto */
         }
         /*  Efek hover agar bercahaya */
         .insta-frame:hover {
@@ -293,7 +295,7 @@
 
         <figure class="insta-frame">
             <img src="biodata/aulia.jpeg" alt="Foto Tentang Saya">
-            <figcaption class="polaroid-text">Salam Kenal! ✨</figcaption>
+            <figcaption class="polaroid-text">Salam Kenal!</figcaption>
         </figure>
     </div>
     </section>
