@@ -145,8 +145,15 @@
         }
         .about-text { flex: 0 0 60%; text-align: left; }
         .about-text p { font-size: 1.1rem; line-height: 1.8; color: #555; margin-bottom: 20px; }
-
-        /* --- BINGKAI POLAROID ESTETIK --- */
+        h2 {
+            font-size: 3.5rem;       /* Mengubah ukuran jadi lebih besar */
+            margin-bottom: 40px;     /* Memberikan jarak lebar dengan paragraf di bawahnya */
+            color: #ff8fab;          /* Memberikan warna pink agar estetik */
+            display: inline-block;   /* Supaya border bawah hanya sepanjang tulisan */
+            border-bottom: 4px solid #fbc4ab; /* Memberikan aksen garis bawah tipis */
+            padding-bottom: 10px;
+        }
+        /* --- BINGKAI POLAROID --- */
         .insta-frame {
             width: 280px;
             height: 350px;
@@ -154,12 +161,27 @@
             padding: 12px 12px 45px 12px; /* Bagian bawah tebal ala polaroid */
             border-radius: 5px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transform: rotate(-3deg); /* Efek miring manis */
+            transform: rotate(-3deg); /* Efek miring */
             transition: 0.4s;
             border: 1px solid #eee;
         }
         .insta-frame:hover { transform: rotate(0deg) scale(1.05); }
         .insta-frame img { width: 100%; height: 100%; object-fit: cover; border-radius: 2px; }
+
+        /* Teks di bagian bawah polaroid */
+        .polaroid-text {
+            text-align: center;
+            font-family: 'Brush Script MT', cursive; /* Tulisan tangan */
+            font-size: 1.3rem;
+            color: #ff8fab;
+            margin-top: 10px;
+        }
+        /*  Efek hover agar bercahaya */
+        .insta-frame:hover {
+            transform: rotate(0deg) scale(1.05);
+            box-shadow: 0 0 40px rgba(255, 143, 171, 0.8);/* Efek cahaya pink di belakang polaroid */
+            border: 2px solid #ff8fab;
+        }
 
         /* --- CARD SYSTEM --- */
         .cards-container {
@@ -253,6 +275,12 @@
         </nav>
     </header>
 
+    <main>
+        <section id="home">...</section>
+        <section id="about">...</section>
+        <section id="hobby">...</section>
+    </main>
+
     <section id="home" class="hero">
         <div class="hero-content">
             <h1>Aulia Nurul Afiza</h1>
@@ -273,9 +301,10 @@
             <a href="#hobby" class="btn">Lihat Hobiku</a>
         </div>
 
-        <div class="insta-frame">
+        <figure class="insta-frame">
             <img src="biodata/aulia.jpeg" alt="Foto Tentang Saya">
-        </div>
+            <figcaption class="polaroid-text">Salam Kenal! ✨</figcaption>
+        </figure>
     </div>
     </section>
 
