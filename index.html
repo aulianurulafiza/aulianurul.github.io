@@ -11,9 +11,9 @@
         }
         
         :root {
-            --bg-color: #1e2624;
-            --sidebar-color: #262f2d;
-            --accent-gold: #c5a059;
+            --bg-color: #758655;
+            --sidebar-color: #c5e384;
+            --accent-gold: #ffb7d5;
             --text-color: #e0e5e4;
         }
 
@@ -29,7 +29,7 @@
         .sidebar {
             position: fixed; top: 0; width: 10%; height: 100vh; background: var(--sidebar-color);
             display: flex; align-items: center; justify-content: center; color: var(--accent-gold);
-            font-size: 0.7rem; letter-spacing: 3px; z-index: 100; border: 1px solid rgba(197, 160, 89, 0.1);
+            font-size: 0.7rem; letter-spacing: 3px; z-index: 100; border: 1px solid #758655;
         }
         .sidebar-left { left: 0; }
         .sidebar-right { right: 0; }
@@ -59,10 +59,10 @@
         .text-info { flex: 1; max-width: 500px; line-height: 1.8; }
         .text-info h3 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--accent-gold); margin-bottom: 20px; }
 
-        /* --- HOBBY (TIDAK DIUBAH) --- */
+        /* --- HOBBY --- */
         .hobby-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%; }
-        .hobby-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(197, 160, 89, 0.2); border-radius: 15px; padding: 20px; transition: 0.4s; }
-        .hobby-card:hover { background: rgba(255, 255, 255, 0.07); transform: translateY(-5px); border-color: var(--accent-gold); }
+        .hobby-card { background: #ffffff08; border: 1px solid rgba(197, 160, 89, 0.2); border-radius: 15px; padding: 20px; transition: 0.4s; }
+        .hobby-card:hover { background: #ffffff12; transform: translateY(-5px); border-color: var(--accent-gold); }
         .hobby-card h4 { font-family: 'Playfair Display', serif; color: var(--accent-gold); margin-bottom: 15px; }
         .hobby-photos { display: flex; gap: 8px; margin-top: 10px; }
         .mini-photo { width: 60px; height: 60px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
@@ -71,7 +71,7 @@
         /* --- TABLE --- */
         .journey-table { width: 100%; border-collapse: collapse; color: #ddd; border: 1px solid rgba(197, 160, 89, 0.2); }
         .journey-table th { background: rgba(197, 160, 89, 0.1); color: var(--accent-gold); padding: 12px; }
-        .journey-table td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .journey-table td { padding: 10px; border-bottom: 1px solid #ffffff0d; }
 
         @media (max-width: 768px) {
             .sidebar { display: none; }
