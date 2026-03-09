@@ -6,245 +6,73 @@
     <title>Biografi | Aulia Nurul Afiza</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-color: #1e2624;
+            --sidebar-color: #262f2d;
+            --accent-gold: #c5a059;
+            --text-color: #e0e5e4;
+        }
 
-        html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
-        body { font-family: 'Poppins', sans-serif; background: #111; color: white; overflow-x: hidden; }
-        section { height: 100vh; width: 100%; scroll-snap-align: start; position: relative; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg-color); color: var(--text-color); overflow-x: hidden; }
+        
+        /* Kursor Tangan untuk elemen interaktif */
+        .page-one, .tab-item, .hobby-card, .main-title { cursor: pointer !important; }
+
+        section { height: 100vh; width: 100%; position: relative; display: flex; flex-direction: column; }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            position: fixed; top: 0; width: 10%; height: 100vh; background: var(--sidebar-color);
+            display: flex; align-items: center; justify-content: center; color: var(--accent-gold);
+            font-size: 0.7rem; letter-spacing: 3px; z-index: 100; border: 1px solid rgba(197, 160, 89, 0.1);
+        }
+        .sidebar-left { left: 0; }
+        .sidebar-right { right: 0; }
+        .sidebar-content { writing-mode: vertical-rl; transform: rotate(180deg); }
 
         /* --- HALAMAN 1 --- */
-        .page-one { display: flex; justify-content: center; align-items: center; cursor: pointer; }
-        .background-container { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            background-image: url('biodata/auljogja.jpeg'); background-size: cover; background-position: center; 
-            filter: blur(8px); z-index: -1; 
-        }
+        .page-one { display: flex; justify-content: center; align-items: center; cursor: pointer; text-align: center; }
+        .background-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('biodata/auljogja.jpeg') center/cover; filter: blur(8px); z-index: -1; }
         .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.3); }
-        h1.main-title { 
-            font-family: 'Playfair Display', serif; font-size: clamp(2rem, 8vw, 4rem); 
-            letter-spacing: 2px; text-transform: uppercase; z-index: 1; 
-            opacity: 0; transform: translateY(30px); animation: fadeInUp 2.5s ease-out forwards; 
-        }
-        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
-
-        /* Judul diperkecil sedikit agar pas dengan kalimat baru */
-        h1.main-title {
-            font-size: clamp(1.8rem, 6vw, 3.5rem) !important;
-            margin-bottom: 10px;
-        }
-
-        /* Style teks kedap-kedip */
-        .click-hint {
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.9rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: rgba(212, 175, 55, 0.8); /* Warna emas transparan */
-            opacity: 0;
-            animation: fadeIn 2s ease-out 1s forwards, blink 2s infinite 3s;
-        }
-
-        /* Animasi kedap-kedip */
-        @keyframes blink {
-            0% { opacity: 0.2; }
-            50% { opacity: 0.8; }
-            100% { opacity: 0.2; }
-        }
-
-        /* Animasi muncul pertama kali */
-        @keyframes fadeIn {
-            to { opacity: 0.8; }
-        }
+        .main-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 6vw, 3.5rem); color: #fff; z-index: 1; }
+        .click-hint { color: var(--accent-gold); font-size: 0.9rem; letter-spacing: 3px; margin-top: 10px; animation: blink 2s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
 
         /* --- HALAMAN 2 --- */
-        .page-two {
-            display: flex;
-            flex-direction: column;
-            background: #111;
-            padding: 40px 5%;
-        }
+        .page-two { padding: 40px 15%; }
+        .nav-tabs { display: flex; justify-content: center; gap: 50px; margin-bottom: 50px; border-bottom: 1px solid rgba(197, 160, 89, 0.3); padding-bottom: 20px; }
+        .tab-item { font-family: 'Playfair Display', serif; font-size: 1.5rem; cursor: pointer; color: #7a8a86; transition: 0.3s; }
+        .tab-item.active { color: var(--accent-gold); transform: scale(1.1); }
 
-        /* Navigasi 3 Tulisan ke Samping */
-        .nav-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 50px;
-            margin-bottom: 50px;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-            padding-bottom: 20px;
-        }
+        .content-display { display: none; gap: 60px; align-items: center; justify-content: center; animation: fadeIn 0.8s; }
+        .content-display.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .tab-item {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            letter-spacing: 3px;
-            cursor: pointer;
-            color: #666;
-            transition: all 0.4s ease;
-        }
+        /* --- ELEMEN KONTEN --- */
+        .photo-frame { flex: 0 0 300px; height: 400px; border: 8px solid var(--sidebar-color); outline: 1px solid var(--accent-gold); overflow: hidden; }
+        .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
+        .text-info { flex: 1; max-width: 500px; line-height: 1.8; }
+        .text-info h3 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--accent-gold); margin-bottom: 20px; }
 
-        .tab-item.active {
-            color: #d4af37;
-            transform: scale(1.1);
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-        }
-
-        /* Area Konten (Foto + Teks) */
-        .content-display {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 60px;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease;
-            height: 0;
-            overflow: hidden;
-        }
-
-        .content-display.active {
-            opacity: 1;
-            transform: translateY(0);
-            height: auto;
-            margin-top: 20px;
-        }
-
-        /* Bingkai Foto */
-        .photo-frame {
-            flex: 0 0 300px;
-            height: 400px;
-            border: 8px solid #1a1a1a;
-            outline: 1px solid #d4af37;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 20px 20px 50px rgba(0,0,0,0.5);
-        }
-
-        .photo-frame img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: grayscale(30%);
-            transition: 0.5s;
-        }
-
-        .photo-frame:hover img { filter: grayscale(0%); transform: scale(1.05); }
-
-        /* Teks Penjelasan */
-        .text-info {
-            flex: 1;
-            max-width: 500px;
-            text-align: justify;
-            line-height: 1.8;
-        }
-
-        .text-info h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: #d4af37;
-        }
+        /* --- HOBBY (TIDAK DIUBAH) --- */
+        .hobby-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%; }
+        .hobby-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(197, 160, 89, 0.2); border-radius: 15px; padding: 20px; transition: 0.4s; }
+        .hobby-card:hover { background: rgba(255, 255, 255, 0.07); transform: translateY(-5px); border-color: var(--accent-gold); }
+        .hobby-card h4 { font-family: 'Playfair Display', serif; color: var(--accent-gold); margin-bottom: 15px; }
+        .hobby-photos { display: flex; gap: 8px; margin-top: 10px; }
+        .mini-photo { width: 60px; height: 60px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+        .mini-photo img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* --- TABLE --- */
+        .journey-table { width: 100%; border-collapse: collapse; color: #ddd; border: 1px solid rgba(197, 160, 89, 0.2); }
+        .journey-table th { background: rgba(197, 160, 89, 0.1); color: var(--accent-gold); padding: 12px; }
+        .journey-table td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
         @media (max-width: 768px) {
-            .content-display { flex-direction: column; gap: 30px; }
-            .nav-tabs { gap: 20px; }
-            .tab-item { font-size: 1rem; }
-            .photo-frame { flex: 0 0 250px; width: 200px; height: 300px; }
-        }
-
-        /* Style Tabel yang Elegan */
-        .journey-table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-            color: #ddd;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid rgba(212, 175, 55, 0.2);
-        }
-
-        .journey-table th {
-            background: rgba(212, 175, 55, 0.1);
-            color: #d4af37;
-            padding: 12px;
-            text-align: left;
-            font-family: 'Playfair Display', serif;
-            letter-spacing: 1px;
-        }
-
-        .journey-table td {
-            padding: 10px 12px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .journey-table tr:hover {
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        /* Grid Kartu Hobby */
-        .hobby-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2 kolom ke samping */
-            gap: 20px;
-            width: 100%;
-        }
-
-        .hobby-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 15px;
-            padding: 20px;
-            transition: all 0.4s ease;
-            position: relative;
-        }
-
-        .hobby-card:hover {
-            background: rgba(255, 255, 255, 0.07);
-            transform: translateY(-5px);
-            border-color: #d4af37;
-        }
-
-        .hobby-card h4 {
-            font-family: 'Playfair Display', serif;
-            color: #d4af37;
-            margin-bottom: 15px;
-            font-size: 1.2rem;
-            letter-spacing: 1px;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-            padding-bottom: 5px;
-        }
-
-        /* Container Foto Kecil-Kecil */
-        .hobby-photos {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .mini-photo {
-            width: 60px;
-            height: 60px;
-            background: #222;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .mini-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.7;
-            transition: 0.3s;
-        }
-
-        .hobby-card:hover .mini-photo img {
-            opacity: 1;
-        }
-
-        /* Responsif HP */
-        @media (max-width: 600px) {
+            .sidebar { display: none; }
+            .page-two { padding: 20px; }
+            .content-display { flex-direction: column; }
             .hobby-grid { grid-template-columns: 1fr; }
         }
     </style>
@@ -254,116 +82,96 @@
     <section class="page-one" onclick="window.location.href='#halaman2'">
         <div class="background-container"></div>
         <div class="overlay"></div>
-        <div style="text-align: center; z-index: 1;">
+        <div>
             <h1 class="main-title">AULIA NURUL AFIZA</h1>
-            <p class="click-hint">Click Everywhere</p>
+            <p class="click-hint">CLICK EVERYWHERE</p>
         </div>
     </section>
 
-    <section class="page-two" id="halaman2">
-    <div class="nav-tabs">
-        <div class="tab-item active" onclick="showContent(0)">ABOUT</div>
-        <div class="tab-item" onclick="showContent(1)">HOBBY</div>
-        <div class="tab-item" onclick="showContent(2)">JOURNEY</div>
-    </div>
+    <div class="sidebar sidebar-left"><div class="sidebar-content"><span>BATAM, INDONESIA</span></div></div>
+    <div class="sidebar sidebar-right"><div class="sidebar-content"><span>UIB - SISTEM INFORMASI</span></div></div>
 
-    <div id="content-container">
-        <div class="content-display active">
-            <div class="photo-frame">
-                <img src="biodata/aul.jpeg" alt="Aulia About">
-            </div>
-            <div class="text-info">
-                <h3>About Me</h3>
-                <p>Halo! Saya Aulia Nurul Afiza, mahasiswi semester awal di <strong>Universitas Internasional Batam</strong>. Lahir di Batam, 11 Juni 2007. Saya sangat tertarik dengan teknologi dan analisis data.</p>
-            </div>
+    <section class="page-two" id="halaman2">
+        <div class="nav-tabs">
+            <div class="tab-item active" onclick="showContent(0)">ABOUT</div>
+            <div class="tab-item" onclick="showContent(1)">HOBBY</div>
+            <div class="tab-item" onclick="showContent(2)">JOURNEY</div>
         </div>
 
-        <div class="content-display">
-            <div class="text-info" style="max-width: 900px; margin: 0 auto;">
-                <h3 style="text-align: center; margin-bottom: 25px;">My Personal Hobbies</h3>
-                <div class="hobby-grid">
-                    <div class="hobby-card">
-                        <h4>✈️ Travelling</h4>
-                        <p style="font-size: 0.8rem; color: #bbb;">Menciptakan memori di setiap destinasi dan menikmati keindahan alam serta budaya yang berbeda.</p>
-                        <div class="hobby-photos">
-                            <div class="mini-photo"><img src="biodata/jalan1.jpeg" alt=""></div>
-                            <div class="mini-photo"><img src="biodata/jalan2.jpeg" alt=""></div>
-                            <div class="mini-photo"><img src="biodata/jalan3.jpeg" alt=""></div>
+        <div id="content-container">
+            <div class="content-display active">
+                <div class="photo-frame"><img src="biodata/aul.jpeg"></div>
+                <div class="text-info">
+                    <h3>About Me</h3>
+                    <p>Halo! Saya Aulia Nurul Afiza, mahasiswi semester awal di <strong>Universitas Internasional Batam</strong>. Lahir di Batam, 11 Juni 2007. Saya sangat tertarik dengan teknologi dan analisis data.</p>
+                </div>
+            </div>
+
+            <div class="content-display">
+                <div class="text-info" style="max-width: 900px;">
+                    <h3 style="text-align: center;">My Personal Hobbies</h3>
+                    <div class="hobby-grid">
+                        <div class="hobby-card">
+                            <h4>✈️ Travelling</h4>
+                            <p style="font-size: 0.8rem; color: #bbb;">Menciptakan memori di setiap destinasi.</p>
+                            <div class="hobby-photos">
+                                <div class="mini-photo"><img src="biodata/jalan1.jpeg"></div>
+                                <div class="mini-photo"><img src="biodata/jalan2.jpeg"></div>
+                                <div class="mini-photo"><img src="biodata/jalan3.jpeg"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="hobby-card">
-                        <h4>🎵 Musik</h4>
-                        <p style="font-size: 0.8rem; color: #bbb;">Melodi adalah teman terbaik saat sedang fokus belajar atau bersantai.</p>
-                        <div class="hobby-photos">
-                            <div class="mini-photo"><img src="biodata/lagu1.png" alt=""></div>
-                            <div class="mini-photo"><img src="biodata/lagu2.png" alt=""></div>
-                            <div class="mini-photo"><img src="biodata/lagu3.png" alt=""></div>
+                        <div class="hobby-card">
+                            <h4>🎵 Musik</h4>
+                            <p style="font-size: 0.8rem; color: #bbb;">Melodi teman terbaik saat belajar.</p>
+                            <div class="hobby-photos">
+                                <div class="mini-photo"><img src="biodata/lagu1.png"></div>
+                                <div class="mini-photo"><img src="biodata/lagu2.png"></div>
+                                <div class="mini-photo"><img src="biodata/lagu3.png"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="hobby-card">
-                        <h4>🎬 Film/Series</h4>
-                        <p style="font-size: 0.8rem; color: #bbb;">Menikmati alur cerita menarik dan mengambil pesan moral di dalamnya.</p>
-                        <div class="hobby-photos">
-                            <div class="mini-photo"><img src="biodata/film1.jpg" alt=""></div>
-                            <div class="mini-photo"><img src="biodata/film2.jpg" alt=""></div>
-                            <div class="mini-photo"><img src="biodata/film3.jpg" alt=""></div>
+                        <div class="hobby-card">
+                            <h4>🎬 Film/Series</h4>
+                            <p style="font-size: 0.8rem; color: #bbb;">Menikmati alur cerita inspiratif.</p>
+                            <div class="hobby-photos">
+                                <div class="mini-photo"><img src="biodata/film1.jpg"></div>
+                                <div class="mini-photo"><img src="biodata/film2.jpg"></div>
+                                <div class="mini-photo"><img src="biodata/film3.jpg"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="hobby-card">
-                        <h4>🍜 Kuliner</h4>
-                        <p style="font-size: 0.8rem; color: #bbb;">Menjelajahi berbagai cita rasa unik.</p>
-                        <div class="hobby-photos">
-                            <div class="mini-photo"><img src="biodata/makan1.jpeg" alt=""></div>
-                            <div class="mini-photo"><img src="biodata/makan2.jpeg" alt=""></div>
-                            <div class="mini-photo"><img src="biodata/makan3.jpeg" alt=""></div>
+                        <div class="hobby-card">
+                            <h4>🍜 Kuliner</h4>
+                            <p style="font-size: 0.8rem; color: #bbb;">Menjelajahi cita rasa unik.</p>
+                            <div class="hobby-photos">
+                                <div class="mini-photo"><img src="biodata/makan1.jpeg"></div>
+                                <div class="mini-photo"><img src="biodata/makan2.jpeg"></div>
+                                <div class="mini-photo"><img src="biodata/makan3.jpeg"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="content-display">
-            <div class="text-info" style="max-width: 800px; margin: 0 auto;">
-                <h3 style="text-align: center;">The Journey</h3>
-                <p style="text-align: center; margin-bottom: 20px;">Rekam jejak pendidikan saya:</p>
-                <table class="journey-table">
-                    <thead>
-                        <tr>
-                            <th>Tahun</th>
-                            <th>Institusi</th>
-                            <th>Keterangan</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>2013 - 2019</td><td>SDN 008 SEKUPANG</td><td>-</td></tr>
-                        <tr><td>2019 - 2022</td><td>SMP IT NURUL MUHAJIRIN</td><td>-</td></tr>
-                        <tr><td>2022 - 2025</td><td>SMAN 1 BATAM</td><td>IPS</td></tr>
-                        <tr><td>2025 - Sekarang</td><td>UNIVERSITAS INTERNASIONAL BATAM</td><td>S1 SISTEM INFORMASI</td></tr>
-                    </tbody>
-                </table>
+            <div class="content-display">
+                <div class="text-info" style="max-width: 800px;">
+                    <h3>The Journey</h3>
+                    <table class="journey-table">
+                        <thead><tr><th>Tahun</th><th>Institusi</th><th>Ket</th></tr></thead>
+                        <tbody>
+                            <tr><td>2013-2019</td><td>SDN 008 SEKUPANG</td><td>-</td></tr>
+                            <tr><td>2019-2022</td><td>SMP IT NURUL MUHAJIRIN</td><td>-</td></tr>
+                            <tr><td>2022-2025</td><td>SMAN 1 BATAM</td><td>IPS</td></tr>
+                            <tr><td>2025-Skrng</td><td>UIB</td><td>S1 Sistem Informasi</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
-</section>
-    <footer style="text-align: center; padding: 20px; font-size: 0.8rem; color: #666; background: #111; border-top: 1px solid rgba(212, 175, 55, 0.1);">
-        <p>&copy; 2026 Aulia Nurul Afiza. Made with ❤️</p>
-    </footer>
+    </section>
 
     <script>
         function showContent(index) {
-            // Update Tab Navigasi
-            const tabs = document.querySelectorAll('.tab-item');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            tabs[index].classList.add('active');
-
-            // Update Konten yang Muncul
-            const contents = document.querySelectorAll('.content-display');
-            contents.forEach(content => content.classList.remove('active'));
-            
-            // Beri sedikit delay agar transisi terasa smooth
-            setTimeout(() => {
-                contents[index].classList.add('active');
-            }, 50);
+            document.querySelectorAll('.tab-item').forEach((t, i) => t.classList.toggle('active', i === index));
+            document.querySelectorAll('.content-display').forEach((c, i) => c.classList.toggle('active', i === index));
         }
     </script>
 </body>
