@@ -6,6 +6,10 @@
     <title>Biografi | Aulia Nurul Afiza</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        
         :root {
             --bg-color: #1e2624;
             --sidebar-color: #262f2d;
@@ -14,7 +18,7 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg-color); color: var(--text-color); overflow-x: hidden; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg-color); color: var(--text-color); overflow-x: hidden; scroll-padding-top: 0px; }
         
         /* Kursor Tangan untuk elemen interaktif */
         .page-one, .tab-item, .hobby-card, .main-title { cursor: pointer !important; }
@@ -79,7 +83,7 @@
 </head>
 <body>
 
-    <section class="page-one" onclick="window.location.href='#halaman2'">
+    <section class="page-one" onclick="document.getElementById('halaman2').scrollIntoView({behavior: 'smooth'})">
         <div class="background-container"></div>
         <div class="overlay"></div>
         <div>
