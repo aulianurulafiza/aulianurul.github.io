@@ -78,6 +78,36 @@
         .journey-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         .journey-table th { color: var(--accent-gold); padding: 10px; border-bottom: 2px solid var(--accent-gold); }
         .journey-table td { padding: 12px; border-bottom: 1px solid #ffffff0d; }
+
+        @media (max-width: 768px) {
+            .sidebar-left, .sidebar-right {
+                display: none !important;
+            }
+            .main-content {
+                margin: 0 !important;
+                padding: 20px !important;
+                position: relative !important;
+                width: 100% !important;
+            }
+            .nav-tabs {
+                flex-direction: row;
+                gap: 15px !important;
+            }
+            .tab-item {
+                font-size: 1rem !important;
+            }
+            .content-display {
+                flex-direction: column !important;
+                gap: 20px !important;
+            }
+            .photo-frame {
+                flex: 0 0 200px !important;
+                height: 250px !important;
+            }
+            .hobby-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
     </style>
 </head>
 <body>
