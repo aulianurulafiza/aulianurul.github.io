@@ -11,6 +11,33 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Poppins', sans-serif; background: var(--bg-color); color: var(--text-color); overflow-x: hidden; }
 
+        /* Container untuk background */
+        .background-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Ganti 'biodata/auljogja.jpeg' dengan path foto kamu yang benar */
+            background: url('biodata/auljogja.jpeg') center/cover no-repeat;
+            filter: blur(8px); /* Inilah kuncinya */
+            z-index: -1;
+            transform: scale(1.1); /* Sedikit diperbesar agar tidak ada garis putih di pinggir blur */
+        }
+
+        /* Container utama halaman satu */
+        .page-one {
+            height: 100vh;
+            width: 100%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Penting agar efek blur tidak meluber */
+            cursor: pointer;
+            text-align: center;
+        }
+
         /* Sidebar */
         .sidebar-left, .sidebar-right { position: fixed; top: 0; width: 10%; height: 100vh; background: var(--sidebar-color); z-index: 100; display: flex; flex-direction: column; }
         .sidebar-left { left: 0; border-right: 1px solid rgba(255,255,255,0.1); }
@@ -19,7 +46,18 @@
         .nav-item:hover, .nav-item.active { background: rgba(0,0,0,0.1); color: var(--accent-gold); }
 
         /* Konten */
-        .main-content { margin: 0 10%; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 50px; }
+        .main-content { 
+            position: fixed; /* Mengunci posisi agar tidak perlu scroll */
+            top: 0; 
+            left: 10%; /* Sesuai lebar sidebar kiri */
+            width: 80%; /* Sisa lebar layar (100% - 10% kiri - 10% kanan) */
+            height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 50px;
+            z-index: 10;
+        }
         #home-screen { text-align: center; }
         .content-display { display: none; gap: 40px; padding: 40px; background: rgba(255,255,255,0.05); border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); align-items: center; }
         .content-display.active { display: flex; }
@@ -43,6 +81,16 @@
     </style>
 </head>
 <body>
+
+    <section class="page-one" onclick="document.getElementById('halaman2').scrollIntoView({behavior: 'smooth'})">
+        <div class="background-container"></div>
+        
+        <div class="overlay" style="position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.3); z-index: 0;"></div>
+        
+        <div style="z-index: 1;">
+            <h1 class="main-title">AULIA NURUL AFIZA</h1>
+        </div>
+    </section>
 
     <div class="sidebar-left">
         <div class="nav-item" onclick="showSection(0)">ABOUT</div>
@@ -101,17 +149,20 @@
             const home = document.getElementById('home-screen');
             const contents = document.querySelectorAll('.content-display');
             const navs = document.querySelectorAll('.nav-item');
-            const isActive = contents[index].classList.contains('active');
+            
+            // Cek apakah konten yang dipilih sudah aktif
+            const isAlreadyActive = contents[index].classList.contains('active');
 
+            // Reset semua
             contents.forEach(c => c.classList.remove('active'));
             navs.forEach(n => n.classList.remove('active'));
             
-            if (!isActive) {
-                home.style.display = 'none';
-                contents[index].classList.add('active');
-                navs[index].classList.add('active');
+            if (!isAlreadyActive) {
+                home.style.display = 'none'; // Sembunyikan home
+                contents[index].classList.add('active'); // Tampilkan konten pilihan
+                navs[index].classList.add('active'); // Tandai menu aktif
             } else {
-                home.style.display = 'block';
+                home.style.display = 'block'; // Jika diklik lagi, balikkan ke home
             }
         }
     </script>
