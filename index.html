@@ -97,11 +97,20 @@
                 font-size: 1rem !important;
             }
             .content-display {
-                flex-direction: column !important;
+                display: none; /* Tetap sembunyi secara default */
+                flex-direction: column !important; /* Paksa menumpuk */
+                align-items: center !important;    /* Paksa tengah */
+                justify-content: flex-start !important;
                 gap: 20px !important;
+                padding: 20px !important;
+            }
+            .content-display.active {
+                display: flex !important;
             }
             .photo-frame {
                 flex: 0 0 200px !important;
+                width: 100% !important; 
+                max-width: 300px !important;
                 height: 250px !important;
             }
             .hobby-grid {
