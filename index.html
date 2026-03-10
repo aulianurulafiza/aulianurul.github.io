@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biografi | Aulia Nurul Afiza</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
     <style>
         html {
@@ -11,10 +12,10 @@
         }
         
         :root {
-            --bg-color: #758655;
-            --sidebar-color: #c5e384;
-            --accent-gold: #ffb7d5;
-            --text-color: #e0e5e4;
+            --bg-color: #556b48;
+            --sidebar-color: #6c7d61;
+            --accent-gold: #ffc5d3;
+            --text-color: #f8f4e1;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -29,11 +30,31 @@
         .sidebar {
             position: fixed; top: 0; width: 10%; height: 100vh; background: var(--sidebar-color);
             display: flex; align-items: center; justify-content: center; color: var(--accent-gold);
-            font-size: 0.7rem; letter-spacing: 3px; z-index: 100; border: 1px solid #758655;
+            font-size: 0.7rem; letter-spacing: 3px; z-index: 100; border: 1px solid rgb(255, 255, 255, 0.1);
+            pointer-events: all;
         }
         .sidebar-left { left: 0; }
         .sidebar-right { right: 0; }
-        .sidebar-content { writing-mode: vertical-rl; transform: rotate(180deg); }
+        .sidebar-content { 
+            writing-mode: vertical-rl; 
+            transform: rotate(180deg); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
+            gap: 30px; 
+        }
+
+        .sidebar-content a {
+            transition: 0.3s;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .sidebar-content a:hover {
+            transform: scale(1.2);
+            color: #fff !important;
+        }
 
         /* --- HALAMAN 1 --- */
         .page-one { display: flex; justify-content: center; align-items: center; cursor: pointer; text-align: center; }
@@ -62,7 +83,7 @@
         /* --- HOBBY --- */
         .hobby-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%; }
         .hobby-card { background: #ffffff08; border: 1px solid rgba(197, 160, 89, 0.2); border-radius: 15px; padding: 20px; transition: 0.4s; }
-        .hobby-card:hover { background: #ffffff12; transform: translateY(-5px); border-color: var(--accent-gold); }
+        .hobby-card:hover { background: rgba(255, 255, 255, 0.1); transform: translateY(-5px); border-color: var(--accent-gold); }
         .hobby-card h4 { font-family: 'Playfair Display', serif; color: var(--accent-gold); margin-bottom: 15px; }
         .hobby-photos { display: flex; gap: 8px; margin-top: 10px; }
         .mini-photo { width: 60px; height: 60px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
@@ -70,14 +91,42 @@
         
         /* --- TABLE --- */
         .journey-table { width: 100%; border-collapse: collapse; color: #ddd; border: 1px solid rgba(197, 160, 89, 0.2); }
-        .journey-table th { background: rgba(197, 160, 89, 0.1); color: var(--accent-gold); padding: 12px; }
+        .journey-table th { background: rgba(244, 209, 209, 0.1); color: var(--accent-gold); padding: 12px; }
         .journey-table td { padding: 10px; border-bottom: 1px solid #ffffff0d; }
 
         @media (max-width: 768px) {
+            img { max-width: 100%;}
+            .main-title { font-size: 2.2rem !important; }
+            .nav-tabs { gap: 20pax;  flex-wrap: wrap;}
             .sidebar { display: none; }
             .page-two { padding: 20px; }
             .content-display { flex-direction: column; }
             .hobby-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Efek Glassmorphism */
+        .content-display {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Transisi sembunyi */
+        .hidden {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .social-links a:hover {
+            transform: scale(1.2);
+            color: #fff !important;
         }
     </style>
 </head>
@@ -92,8 +141,16 @@
         </div>
     </section>
 
-    <div class="sidebar sidebar-left"><div class="sidebar-content"><span>BATAM, INDONESIA</span></div></div>
-    <div class="sidebar sidebar-right"><div class="sidebar-content"><span>UIB - SISTEM INFORMASI</span></div></div>
+    <div class="sidebar sidebar-left">
+        <div class="sidebar-content">
+            <span>BATAM, INDONESIA</span>
+        </div>
+    </div>
+    <div class="sidebar sidebar-right">
+        <div class="sidebar-content">
+            <span>UIB - SISTEM INFORMASI</span>
+        </div>
+    </div>
 
     <section class="page-two" id="halaman2">
         <div class="nav-tabs">
@@ -103,7 +160,7 @@
         </div>
 
         <div id="content-container">
-            <div class="content-display active">
+            <div class="content-display hidden active">
                 <div class="photo-frame"><img src="biodata/aul.jpeg"></div>
                 <div class="text-info">
                     <h3>About Me</h3>
@@ -111,7 +168,7 @@
                 </div>
             </div>
 
-            <div class="content-display">
+            <div class="content-display hidden">
                 <div class="text-info" style="max-width: 900px;">
                     <h3 style="text-align: center;">My Personal Hobbies</h3>
                     <div class="hobby-grid">
@@ -155,7 +212,7 @@
                 </div>
             </div>
 
-            <div class="content-display">
+            <div class="content-display hidden">
                 <div class="text-info" style="max-width: 800px;">
                     <h3>The Journey</h3>
                     <table class="journey-table">
@@ -173,10 +230,39 @@
     </section>
 
     <script>
-        function showContent(index) {
+        function showContent(index) { 
             document.querySelectorAll('.tab-item').forEach((t, i) => t.classList.toggle('active', i === index));
-            document.querySelectorAll('.content-display').forEach((c, i) => c.classList.toggle('active', i === index));
+            
+            document.querySelectorAll('.content-display').forEach((c, i) => {
+                c.classList.toggle('active', i === index);
+                if (i === index) c.classList.add('show');
+            });
         }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        }, { threshold: 0.1 }); 
+
+        document.querySelectorAll('.hidden').forEach((el) => observer.observe(el));
     </script>
+
+    <div class="social-links" style="position:fixed; bottom:20px; right:20px; z-index:1000; display: flex; gap: 20px;">
+        <a href="https://www.instagram.com/aull.nrll?igsh=eGExaHpocXJwZmhr" target="_blank" style="color:var(--accent-gold); transition: 0.3s;">
+            <i class="fab fa-instagram fa-2x"></i>
+        </a>
+        <a href="https://github.com/" target="_blank" style="color:var(--accent-gold); transition: 0.3s;">
+            <i class="fab fa-github fa-2x"></i>
+        </a>
+    </div>
+
+    <footer style="text-align:center; padding:40px 20px; color:rgba(255,255,255,0.5);">
+        <p>&copy; 2026 Aulia Nurul Afiza</p>
+        <small>Built with Code & Matcha | Sistem Informasi UIB</small>
+    </footer>
+
 </body>
 </html>
