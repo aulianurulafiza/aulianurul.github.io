@@ -9,211 +9,471 @@
     <style>
         :root { --bg-color: #556b48; --sidebar-color: #6c7d61; --accent-gold: #ffc5d3; --text-color: #f8f4e1; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg-color); color: var(--text-color); width: 100%; overflow-x: hidden; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg-color); color: var(--text-color); overflow-x: hidden; }
 
-        /* Container untuk background */
-        .background-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            /* Ganti 'biodata/auljogja.jpeg' dengan path foto kamu yang benar */
-            background: url('biodata/auljogja.jpeg') center/cover no-repeat;
-            filter: blur(8px); /* Inilah kuncinya */
-            z-index: -1;
-            transform: scale(1.1); /* Sedikit diperbesar agar tidak ada garis putih di pinggir blur */
-        }
-
-        /* Container utama halaman satu */
-        .page-one {
-            height: 100vh;
-            width: 100%;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden; /* Penting agar efek blur tidak meluber */
-            cursor: pointer;
-            text-align: center;
-        }
-
-        /* Sidebar */
-        .sidebar-left, .sidebar-right { position: fixed; top: 0; width: 10%; height: 100vh; background: var(--sidebar-color); z-index: 100; display: flex; flex-direction: column; }
-        .sidebar-left { left: 0; border-right: 1px solid rgba(255,255,255,0.1); }
-        .sidebar-right { right: 0; border-left: 1px solid rgba(255,255,255,0.1); writing-mode: vertical-rl; transform: rotate(180deg); align-items: center; justify-content: center; color: var(--accent-gold); font-size: 0.7rem; letter-spacing: 3px; }
-        .nav-item { flex: 1; display: flex; align-items: center; justify-content: center; writing-mode: vertical-rl; transform: rotate(180deg); cursor: pointer; font-size: 0.8rem; letter-spacing: 3px; color: #b0c0a8; transition: 0.4s; }
+        /* Sidebar Kiri */
+        .sidebar-left { position: fixed; left: 0; top: 0; width: 90px; height: 100vh; background: var(--sidebar-color); z-index: 100; display: flex; flex-direction: column; border-right: 1px solid rgba(255,255,255,0.1); }
+        .nav-item { flex: 1; display: flex; align-items: center; justify-content: center; writing-mode: vertical-rl; transform: rotate(180deg); cursor: pointer; font-size: 0.8rem; letter-spacing: 2px; color: #b0c0a8; transition: 0.4s; }
         .nav-item:hover, .nav-item.active { background: rgba(0,0,0,0.1); color: var(--accent-gold); }
+
+        /* Sidebar Kanan */
+        .sidebar-right { 
+            position: fixed; 
+            right: 0; 
+            top: 0; 
+            width: 120px;
+            height: 100vh; 
+            background: var(--sidebar-color); 
+            z-index: 100; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: flex-start; 
+            padding-top: 80px; 
+            color: var(--text-color); 
+            font-size: 0.65rem; 
+            border-left: 1px solid rgba(255,255,255,0.1);
+            transition: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
+            text-align: center;
+            writing-mode: horizontal-tb; 
+            transform: none; 
+        }
+
+        .sidebar-right.hidden { right: -120px; }
+
+        .info-box {
+            margin-bottom: 30px;
+            width: 100%;
+            padding: 0 10px;
+        }
+
+        .info-label {
+            color: var(--accent-gold);
+            font-weight: bold;
+            font-size: 0.6rem;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .wireframe-link {
+            display: inline-block;
+            margin-top: 5px;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.6rem;
+            padding: 8px;
+            border: 1px dashed rgba(255, 197, 211, 0.3); /* Garis putus-putus biar estetik */
+            border-radius: 8px;
+            transition: 0.3s;
+            line-height: 1.2;
+        }
+
+        .wireframe-link i {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            color: var(--accent-gold);
+        }
+
+        .wireframe-link:hover {
+            background: rgba(255, 197, 211, 0.1);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+            transform: scale(1.05);
+        }
+
+        /* Animasi Nama */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        #home-screen { animation: fadeInUp 1.2s ease-out; }
+        h1 { font-family: 'Playfair Display', serif; font-size: 4rem; }
 
         /* Konten */
         .main-content { 
-            position: fixed; /* Mengunci posisi agar tidak perlu scroll */
-            top: 0; 
-            left: 10%; /* Sesuai lebar sidebar kiri */
-            width: 80%; /* Sisa lebar layar (100% - 10% kiri - 10% kanan) */
-            height: 100vh; 
+            margin-left: 90px; 
+            margin-right: 120px; 
+            min-height: 100vh; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            padding: 50px;
-            z-index: 10;
+            padding: 60px 40px; /* Padding atas bawah ditambah agar tidak kena top-bar */
         }
-        #home-screen { text-align: center; }
-        .content-display { display: none; gap: 40px; padding: 40px; background: rgba(255,255,255,0.05); border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); align-items: center; }
-        .content-display.active { display: flex; }
+
+        .content-display { 
+            display: none; 
+            padding: 40px; 
+            background: rgba(255,255,255,0.05); 
+            border-radius: 20px; 
+            backdrop-filter: blur(10px); 
+            width: 100%; 
+            max-width: 850px; /* Sedikit diperlebar agar konten 2x2 lebih lega */
+            animation: fadeIn 0.5s; 
+            border: 1px solid rgba(255,255,255,0.1); /* Tambahkan border tipis agar mewah */
+        }
+
+        .content-display.active { 
+            display: block; 
+        }
+
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: scale(0.98); } /* Tambahkan sedikit efek zoom */
+            to { opacity: 1; transform: scale(1); } 
+        }
+
+        /* Tombol Back */
+        .back-btn { position: fixed; bottom: 30px; right: 30px; padding: 12px 25px; background: var(--accent-gold); color: var(--bg-color); border: none; border-radius: 50px; cursor: pointer; font-weight: bold; display: none; z-index: 200; }
         
-        /* About Style */
-        .photo-frame { flex: 0 0 300px; height: 400px; border: 8px solid var(--sidebar-color); outline: 1px solid var(--accent-gold); overflow: hidden; }
-        .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
-        .text-info { flex: 1; }
+        /* Elemen Sidebar */
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }
 
-        /* Hobby Style */
-        .hobby-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .hobby-card { border: 1px solid rgba(197, 160, 89, 0.2); padding: 15px; border-radius: 10px; }
-        .hobby-photos { display: flex; gap: 8px; margin-top: 10px; }
-        .mini-photo { width: 60px; height: 60px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
-        .mini-photo img { width: 100%; height: 100%; object-fit: cover; }
+        /* Top Bar */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 90px;
+            right: 0; /* Kita buat menempel ke ujung kanan layar */
+            margin-right: 120px; /* Tapi kita tahan dengan margin selebar sidebar kanan */
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            z-index: 90;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(85, 107, 72, 0.8);
+            backdrop-filter: blur(5px);
+            transition: margin-right 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Animasi harus sama dengan sidebar */
+        }
 
-        /* Journey Style */
-        .journey-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .journey-table th { color: var(--accent-gold); padding: 10px; border-bottom: 2px solid var(--accent-gold); }
-        .journey-table td { padding: 12px; border-bottom: 1px solid #ffffff0d; }
+        .top-bar.full-width {
+            margin-right: 0; /* Margin jadi nol, otomatis garisnya penuh ke ujung */
+        }
 
-        @media (max-width: 768px) {
-            .sidebar-left, .sidebar-right {
-                display: none !important;
-            }
-            .main-content {
-                margin: 0 !important;
-                padding: 20px !important;
-                position: relative !important;
-                width: 100% !important;
-            }
-            .nav-tabs {
-                flex-direction: row;
-                gap: 15px !important;
-            }
-            .tab-item {
-                font-size: 1rem !important;
-            }
-            .content-display {
-                display: none; /* Tetap sembunyi secara default */
-                flex-direction: column !important; /* Paksa menumpuk */
-                align-items: center !important;    /* Paksa tengah */
-                justify-content: flex-start !important;
-                gap: 20px !important;
-                padding: 20px !important;
-            }
-            .content-display.active {
-                display: flex !important;
-            }
-            .photo-frame {
-                flex: 0 0 200px !important;
-                width: 100% !important; 
-                max-width: 300px !important;
-                height: 250px !important;
-            }
-            .hobby-grid {
-                grid-template-columns: 1fr !important;
-            }
+        .top-left {
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            font-weight: bold;
+            color: var(--accent-gold);
+        }
+
+        .top-right a {
+            color: var(--text-color);
+            margin-left: 20px;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .top-right a:hover {
+            color: var(--accent-gold);
+        }
+
+        /* Efek Hover untuk Hobby & Projects */
+        #sec-1 > div > div, 
+        #sec-4 > div > div {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+
+        #sec-1 > div > div:hover, 
+        #sec-4 > div > div:hover {
+            transform: translateY(-10px); 
+            border-color: var(--accent-gold);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); 
+        }
+
+        .skill-item { margin-bottom: 20px; }
+
+        .bar-bg { 
+            background: rgba(255, 255, 255, 0.1); 
+            height: 8px; 
+            border-radius: 10px; 
+            margin-top: 8px; 
+            overflow: hidden; 
+        }
+
+        .bar-fill { 
+            background: var(--accent-gold); 
+            height: 100%; 
+            border-radius: 10px; 
+            animation: grow 2s ease-out; 
+        }
+
+        @keyframes grow {
+            from { width: 0; }
         }
     </style>
 </head>
 <body>
 
-    <section class="page-one" onclick="document.getElementById('halaman2').scrollIntoView({behavior: 'smooth'})">
-        <div class="background-container"></div>
-        
-        <div class="overlay" style="position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.3); z-index: 0;"></div>
-    </section>
+    <div class="top-bar">
+        <div class="top-left">AULIA</div>
+        <div class="top-right">
+            <a href="#"><i class="fab fa-github"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+    </div>
 
     <div class="sidebar-left">
         <div class="nav-item" onclick="showSection(0)">ABOUT</div>
         <div class="nav-item" onclick="showSection(1)">HOBBY</div>
         <div class="nav-item" onclick="showSection(2)">JOURNEY</div>
+        <div class="nav-item" onclick="showSection(3)">SKILLS</div>
+        <div class="nav-item" onclick="showSection(4)">PROJECTS</div>
     </div>
-    <div class="sidebar-right"><span>UIB - SISTEM INFORMASI</span></div>
+    
+    <div class="sidebar-right" id="sidebar-right">
+        <div class="info-box">
+            <span class="info-label">STATUS</span>
+            <span style="color: #4CAF50; animation: blink 1.5s infinite;">●</span> ONLINE
+        </div>
+        
+        <div class="info-box">
+            <span class="info-label">LOCAL TIME</span>
+            <div id="clock" style="font-weight: bold; font-size: 1.1rem;">00:00</div>
+        </div>
+        
+        <div class="info-box">
+            <span class="info-label">STUDENT</span>
+            <div style="line-height: 1.4;">UIB<br>SISTEM<br>INFORMASI</div>
+        </div>
+        
+        <div class="info-box">
+            <span class="info-label">UI DESIGN</span>
+            <a href="LINK_GDRIVE_KAMU_DISINI" target="_blank" class="wireframe-link">
+                <i class="fas fa-project-diagram"></i><br>
+                View Site Blueprint
+            </a>
+        </div>
+
+        <div class="info-box" style="margin-top: auto; padding-bottom: 40px;">
+            <div style="font-style: italic; opacity: 0.6; font-size: 0.6rem;">
+                "Code is<br>Poetry"
+            </div>
+        </div>
+    </div>
+
+    <button class="back-btn" id="back-btn" onclick="resetHome()">← BACK TO HOME</button>
 
     <section class="main-content">
-        <div id="home-screen"><h1 style="font-family: 'Playfair Display', serif; font-size: 4rem;">AULIA NURUL AFIZA</h1></div>
-
+        <div id="home-screen"><h1>AULIA NURUL AFIZA</h1></div>
         <div class="content-display" id="sec-0">
-            <div class="photo-frame"><img src="biodata/fotoaulia.jpeg"></div>
-            <div class="text-info">
-                <h3>About Me</h3>
-                <p>Halo! Saya Aulia Nurul Afiza, mahasiswi Sistem Informasi UIB. Lahir di Batam, 11 Juni 2007. Saya sangat tertarik dengan teknologi dan analisis data.</p>
+            <div style="display: flex; gap: 30px; align-items: flex-start;">
+                <div class="photo-frame" style="width: 200px; height: 250px; flex-shrink: 0; border: 3px solid var(--accent-gold); border-radius: 15px; overflow: hidden;">
+                    <img src="biodata/fotoaulia.jpeg" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+
+                <div>
+                    <h3>About Me</h3>
+                    <p style="margin-top: 10px;">Halo! Saya Aulia Nurul Afiza, mahasiswi Sistem Informasi UIB. Saya sangat tertarik dengan teknologi, desain UI/UX, dan analisis data.</p>
+                </div>
+            </div>
+        </div>
+        <div class="content-display" id="sec-1"><h3 style="margin-bottom: 5px;">My Daily Vibes</h3><p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 25px;">Hal-hal yang membuat saya tetap kreatif dan bersemangat.</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: left;">
+                
+                <div style="background: rgba(255,255,255,0.05); border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
+                    <img src="biodata/jalan1.jpeg" style="width: 100%; height: 100px; object-fit: cover; opacity: 0.9;">
+                    <div style="padding: 12px;">
+                        <h4 style="color: var(--accent-gold); font-size: 0.9rem;"><i class="fas fa-plane-departure"></i> Traveling</h4>
+                        <p style="font-size: 0.7rem; margin-top: 5px;">Eksplorasi tempat baru di Batam dan sekitarnya untuk cari inspirasi.</p>
+                    </div>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.05); border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
+                    <img src="biodata/lagu1.png" style="width: 100%; height: 100px; object-fit: cover; opacity: 0.9;">
+                    <div style="padding: 12px;">
+                        <h4 style="color: var(--accent-gold); font-size: 0.9rem;"><i class="fas fa-music"></i> Music</h4>
+                        <p style="font-size: 0.7rem; margin-top: 5px;">Mendengarkan musik favorit sambil ngoding atau sekadar *healing*.</p>
+                    </div>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.05); border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
+                    <img src="biodata/film1.jpg" style="width: 100%; height: 100px; object-fit: cover; opacity: 0.9;">
+                    <div style="padding: 12px;">
+                        <h4 style="color: var(--accent-gold); font-size: 0.9rem;"><i class="fas fa-film"></i> Movie</h4>
+                        <p style="font-size: 0.7rem; margin-top: 5px;">Menikmati film dengan sinematografi yang cantik untuk ide desain.</p>
+                    </div>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.05); border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
+                    <img src="biodata/makan1.jpeg" style="width: 100%; height: 100px; object-fit: cover; opacity: 0.9;">
+                    <div style="padding: 12px;">
+                        <h4 style="color: var(--accent-gold); font-size: 0.9rem;"><i class="fas fa-utensils"></i> Culinary</h4>
+                        <p style="font-size: 0.7rem; margin-top: 5px;">Berburu kuliner enak bareng teman-teman di waktu luang.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-display" id="sec-2"><h3>My Educational Journey</h3><p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 20px;">Jejak pendidikan dan pengembangan diri saya.</p>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid var(--accent-gold); color: var(--accent-gold);">
+                            <th style="padding: 12px 5px;">Tahun</th>
+                            <th style="padding: 12px 5px;">Institusi</th>
+                            <th style="padding: 12px 5px;">Keterangan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 12px 5px;">2013 - 2019</td>
+                            <td style="padding: 12px 5px;">SD Negeri 008 Batam</td>
+                            <td style="padding: 12px 5px;">-</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <td style="padding: 12px 5px;">2019 - 2022</td>
+                            <td style="padding: 12px 5px;">SMP IT NURUL MUHAJIRIN</td>
+                            <td style="padding: 12px 5px;">-</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <td style="padding: 12px 5px;">2022 - 2025</td>
+                            <td style="padding: 12px 5px;">SMAN 1 Batam</td>
+                            <td style="padding: 12px 5px;">IPS / Social</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <td style="padding: 12px 5px;">2025 - Now</td>
+                            <td style="padding: 12px 5px;"><b>Universitas Internasional Batam</b></td>
+                            <td style="padding: 12px 5px;">S1 Sistem Informasi</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <div class="content-display" id="sec-1">
-            <div class="text-info">
-                <h3 style="margin-bottom: 20px;">My Personal Hobbies</h3>
-                <div class="hobby-grid">
-                    <div class="hobby-card"><h4>✈️ Travelling</h4>
-                         <p style="font-size: 0.8rem; color: #bbb;">Menciptakan memori di setiap destinasi.</p>
-                        <div class="hobby-photos"><div class="mini-photo"><img src="biodata/jalan1.jpeg"></div><div class="mini-photo"><img src="biodata/jalan2.jpeg"></div><div class="mini-photo"><img src="biodata/jalan3.jpeg"></div></div></div>
-                    <div class="hobby-card"><h4>🎵 Musik</h4>
-                         <p style="font-size: 0.8rem; color: #bbb;">Melodi teman terbaik saat belajar.</p>
-                        <div class="hobby-photos"><div class="mini-photo"><img src="biodata/lagu1.png"></div><div class="mini-photo"><img src="biodata/lagu2.png"></div><div class="mini-photo"><img src="biodata/lagu3.png"></div></div></div>
-                    <div class="hobby-card"><h4>🎬 Film/Series</h4>
-                        <p style="font-size: 0.8rem; color: #bbb;">Menikmati alur cerita inspiratif.</p>
-                        <div class="hobby-photos"><div class="mini-photo"><img src="biodata/film1.jpg"></div><div class="mini-photo"><img src="biodata/film2.jpg"></div><div class="mini-photo"><img src="biodata/film3.jpg"></div></div></div>
-                    <div class="hobby-card"><h4>🍜 Kuliner</h4>
-                          <p style="font-size: 0.8rem; color: #bbb;">Menjelajahi cita rasa unik.</p>
-                        <div class="hobby-photos"><div class="mini-photo"><img src="biodata/makan1.jpeg"></div><div class="mini-photo"><img src="biodata/makan2.jpeg"></div><div class="mini-photo"><img src="biodata/makan3.jpeg"></div></div></div>
+        <div class="content-display" id="sec-3"><h3>My Skills</h3><p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 25px;">Kombinasi kemampuan teknis dan desain kreatif.</p>
+            <div class="skills-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; text-align: left;">
+                
+                <div>
+                    <div class="skill-item">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+                            <span>Python & Pygame</span><span>85%</span>
+                        </div>
+                        <div class="bar-bg"><div class="bar-fill" style="width: 85%;"></div></div>
+                    </div>
+                    
+                    <div class="skill-item">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+                            <span>HTML & CSS</span><span>90%</span>
+                        </div>
+                        <div class="bar-bg"><div class="bar-fill" style="width: 90%;"></div></div>
+                    </div>
+
+                    <div class="skill-item">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+                            <span>SQL & Database</span><span>80%</span>
+                        </div>
+                        <div class="bar-bg"><div class="bar-fill" style="width: 80%;"></div></div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="skill-item">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+                            <span>UI/UX Design (Figma)</span><span>75%</span>
+                        </div>
+                        <div class="bar-bg"><div class="bar-fill" style="width: 75%;"></div></div>
+                    </div>
+
+                    <div class="skill-item">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+                            <span>Canva & Photoshop</span><span>85%</span>
+                        </div>
+                        <div class="bar-bg"><div class="bar-fill" style="width: 85%;"></div></div>
+                    </div>
+
+                    <div class="skill-item">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+                            <span>Linux Admin</span><span>70%</span>
+                        </div>
+                        <div class="bar-bg"><div class="bar-fill" style="width: 70%;"></div></div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="content-display" id="sec-2">
-            <div class="text-info">
-                <h3>My Journey</h3>
-                <table class="journey-table">
-                    <tr><th>Tahun</th><th>Institusi</th><th>Ket</th></tr>
-                    <tr><td>2013-2019</td><td>SDN 008 SEKUPANG</td><td>-</td></tr>
-                    <tr><td>2019-2022</td><td>SMP IT NURUL MUHAJIRIN</td><td>-</td></tr>
-                    <tr><td>2022-2025</td><td>SMAN 1 BATAM</td><td>IPS</td></tr>
-                    <tr><td>2025-Sekarang</td><td>UIB</td><td>S1 Sistem Informasi</td></tr>
-                </table>
+        <div class="content-display" id="sec-4"><h3 style="margin-bottom: 5px;">Selected Projects</h3><p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 25px;">Koleksi proyek akademik dan personal saya.</p>
+        
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: left;">
+                
+                <div style="background: rgba(255,255,255,0.05); border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s;">
+                    <img src="game_python.jpg" style="width: 100%; height: 100px; object-fit: cover; opacity: 0.8;">
+                    <div style="padding: 15px;">
+                        <h4 style="color: var(--accent-gold); font-size: 0.9rem;">Python Games</h4>
+                        <p style="font-size: 0.7rem; margin-top: 5px; line-height: 1.4;">Game "Fruit Catch" & "Feed the Cat" dengan Pygame.</p>
+                    </div>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.05); border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s;">
+                    <img src="database_resto.jpg" style="width: 100%; height: 100px; object-fit: cover; opacity: 0.8;">
+                    <div style="padding: 15px;">
+                        <h4 style="color: var(--accent-gold); font-size: 0.9rem;">Resto Database</h4>
+                        <p style="font-size: 0.7rem; margin-top: 5px; line-height: 1.4;">Perancangan ERD & Normalisasi 3NF sistem restoran.</p>
+                    </div>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.05); border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s;">
+                    <img src="web_portfolio.jpg" style="width: 100%; height: 100px; object-fit: cover; opacity: 0.8;">
+                    <div style="padding: 15px;">
+                        <h4 style="color: var(--accent-gold); font-size: 0.9rem;">Web Portfolio</h4>
+                        <p style="font-size: 0.7rem; margin-top: 5px; line-height: 1.4;">Website portofolio responsif dengan sidebar dinamis.</p>
+                    </div>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.05); border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s;">
+                    <img src="app_design.jpg" style="width: 100%; height: 100px; object-fit: cover; opacity: 0.8;">
+                    <div style="padding: 15px;">
+                        <h4 style="color: var(--accent-gold); font-size: 0.9rem;">Mobile App UI</h4>
+                        <p style="font-size: 0.7rem; margin-top: 5px; line-height: 1.4;">Rancangan antarmuka aplikasi travel di Figma.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <div class="social-links" style="position:fixed; bottom:20px; right:20px; z-index:1000; display: flex; gap: 20px;">
-        <a href="https://www.instagram.com/aull.nrll?igsh=eGExaHpocXJwZmhr" target="_blank" style="color:var(--accent-gold); transition: 0.3s;">
-            <i class="fab fa-instagram fa-2x"></i>
-        </a>
-        <a href="https://github.com/aulianurulafiza/aulianurul.github.io" target="_blank" style="color:var(--accent-gold); transition: 0.3s;">
-            <i class="fab fa-github fa-2x"></i>
-        </a>
-    </div>
-
     <script>
-        function showSection(index) {
-            const home = document.getElementById('home-screen');
-            const contents = document.querySelectorAll('.content-display');
-            const navs = document.querySelectorAll('.nav-item');
-            
-            // Cek apakah konten yang dipilih sudah aktif
-            const isAlreadyActive = contents[index].classList.contains('active');
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
 
-            // Reset semua
-            contents.forEach(c => c.classList.remove('active'));
-            navs.forEach(n => n.classList.remove('active'));
+        function showSection(index) {
+            document.getElementById('home-screen').style.display = 'none';
+            document.getElementById('sidebar-right').classList.add('hidden');
             
-            if (!isAlreadyActive) {
-                home.style.display = 'none'; // Sembunyikan home
-                contents[index].classList.add('active'); // Tampilkan konten pilihan
-                navs[index].classList.add('active'); // Tandai menu aktif
-            } else {
-                home.style.display = 'block'; // Jika diklik lagi, balikkan ke home
+            // Tambahkan ini: Membuat top bar penuh
+            document.querySelector('.top-bar').classList.add('full-width');
+            
+            document.getElementById('back-btn').style.display = 'block';
+            document.querySelectorAll('.content-display').forEach((c, i) => c.classList.toggle('active', i === index));
+            document.querySelectorAll('.nav-item').forEach((n, i) => n.classList.toggle('active', i === index));
+
+            // Animasi skill bar (tetap ada)
+            if(index === 3) {
+                document.querySelectorAll('.bar-fill').forEach(bar => {
+                    bar.style.animation = 'none';
+                    bar.offsetHeight; 
+                    bar.style.animation = 'grow 2s ease-out';
+                });
             }
         }
-    </script>
 
-    <footer style="text-align:center; padding:40px 20px; color:rgba(255,255,255,0.5);">
-        <p>&copy; 2026 Aulia Nurul Afiza</p>
-        <small>Built with Code & Matcha | Sistem Informasi UIB</small>
-    </footer>
+        function resetHome() {
+            const home = document.getElementById('home-screen');
+            home.style.display = 'block';
+            
+            document.getElementById('sidebar-right').classList.remove('hidden');
+            
+            // Tambahkan ini: Mengembalikan top bar ke posisi semula
+            document.querySelector('.top-bar').classList.remove('full-width');
+            
+            document.getElementById('back-btn').style.display = 'none';
+            document.querySelectorAll('.content-display').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        }
+    </script>
 </body>
 </html>
