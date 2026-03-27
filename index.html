@@ -1,219 +1,987 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biografi | Aulia Nurul Afiza</title>
+    <title>Biography | Aulia Nurul Afiza</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
     <style>
-        :root { --bg-color: #556b48; --sidebar-color: #6c7d61; --accent-gold: #ffc5d3; --text-color: #f8f4e1; }
+        :root { --bg-color: #556b48; --sidebar-color: #6c7d61; --accent-pink: #ffc5d3; --text-color: #f8f4e1; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg-color); color: var(--text-color); width: 100%; overflow-x: hidden; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg-color); color: var(--text-color); overflow: hidden; }
 
-        /* Container untuk background */
-        .background-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            /* Ganti 'biodata/auljogja.jpeg' dengan path foto kamu yang benar */
-            background: url('biodata/auljogja.jpeg') center/cover no-repeat;
-            filter: blur(8px); /* Inilah kuncinya */
-            z-index: -1;
-            transform: scale(1.1); /* Sedikit diperbesar agar tidak ada garis putih di pinggir blur */
+        /* Sidebar Left - Glowing Line */
+        .sidebar-left { 
+            position: fixed; left: 0; top: 0; width: 100px; height: 100vh; 
+            background: var(--sidebar-color); z-index: 100; 
+            display: flex; flex-direction: column; 
+            border-right: 1px solid rgba(255,255,255,0.1); 
+        }
+        /* Sidebar Left Item */
+        .nav-item { 
+            flex: 1; display: flex; align-items: center; justify-content: center; 
+            writing-mode: vertical-rl; transform: rotate(180deg);
+            cursor: pointer; font-size: 0.75rem; letter-spacing: 2px; color: #b0c0a8; 
+            transition: 0.4s; position: relative;
         }
 
-        /* Container utama halaman satu */
-        .page-one {
-            height: 100vh;
+        /* Garis Pink Bercahaya */
+        .nav-item::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 4px; height: 0;
+            background: var(--accent-pink); 
+            box-shadow: 0 0 15px var(--accent-pink), 0 0 5px white; /* Efek Cahaya */
+            transition: height 0.5s ease;
+        }
+
+        /* Saat Aktif */
+        .nav-item.active { color: var(--accent-pink); background: rgba(255,197,211,0.05); }
+        .nav-item.active::after { 
+            height: 100%; 
+            background: var(--accent-pink);
+            box-shadow: 0 0 15px var(--accent-pink);
+        }
+
+        /* Sidebar Right */
+        .sidebar-right {
+            position: fixed; 
+            right: 0; 
+            top: 0; 
+            width: 110px; 
+            height: 100vh; 
+            z-index: 100; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* KUNCI: Biar melayang di tengah layar */
+            gap: 15px; 
+            background-image: url('bgkanan.jpg'); /* Pastikan baris ini ada agar fotonya muncul */
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.6s ease-in-out, opacity 0.6s ease;
+        }
+
+        /* Lapisan Gelap (Overlay) di atas foto biar teks terbaca */
+        .sidebar-right::before {
+            content: '';
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Hitam transparan 50% */
+            z-index: 1; /* Di bawah teks, di atas foto */
+        }
+
+        /* Logika Sembunyi yang Diperbaiki */
+        .sidebar-right.hidden { 
+            transform: translateX(100%); /* Geser penuh ke kanan */
+            opacity: 0; /* Menghilang halus */
+        }
+
+        /* --- SINGLE GLASS CARD CONTAINER --- */
+        .glass-panel-right {
+            width: 90%; /* Kasih sedikit ruang di kiri-kanan agar tidak mentok dinding sidebar */
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 197, 211, 0.2);
+            border-radius: 15px;
+            padding: 20px 0; /* Padding atas bawah saja, kiri-kanan 0 biar flex yang atur */
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Tengah vertikal */
+            align-items: center;     /* KUNCI: Tengah horizontal */
+            gap: 20px; 
+            
+            position: relative;
+            z-index: 2;
+        }
+
+        /* --- KOTAK INFO DI DALAMNYA --- */
+        .info-box { 
+            width: 100%; 
+            display: flex;          /* Tambahkan flex di sini juga */
+            flex-direction: column; 
+            align-items: center;    /* Paksa semua isi (teks/icon) ke tengah */
+            text-align: center;     /* Ratatengah untuk teks multi-baris */
+            padding: 0 5px; 
+            font-size: 0.65rem;
+        }
+
+        .info-label { 
+            color: var(--accent-pink); 
+            font-weight: bold; 
+            font-size: 0.55rem; 
+            display: block; 
+            margin-bottom: 3px; 
+            letter-spacing: 1px; 
+            text-transform: uppercase;
+        }
+
+        /* --- Tambahan: Animasi Titik Online Kedip --- */
+        @keyframes pulse-green {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.5; filter: drop-shadow(0 0 3px #4CAF50); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .online-dot {
+            display: inline-block;
+            color: #4CAF50;
+            animation: pulse-green 2s infinite ease-in-out;
+            margin-right: 3px;
+        }
+
+        /* Main Scroll Area */
+        .main-content { 
+            margin-left: 100px;   /* Jarak permanen buat sidebar kiri */
+            margin-right: 110px;  /* Jarak permanen buat sidebar kanan (biar gak nabrak foto/glass) */
+            height: 100vh; 
+            overflow-y: auto; 
+            scroll-behavior: smooth; 
+            scroll-snap-type: y mandatory; 
+            scrollbar-width: none; 
+            -ms-overflow-style: none; 
+        }
+        .main-content::-webkit-scrollbar { display: none; }
+        .main-content.full-width { margin-right: 0; }
+
+        .content-display { 
+            min-height: 100vh; width: 100%; display: flex; 
+            justify-content: center; align-items: center; 
+            scroll-snap-align: start; padding: 60px 40px; position: relative;
+        }
+
+        /* Glass Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px; padding: 40px; width: 100%; max-width: 900px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Top Bar */
+        .top-bar {
+            position: fixed; top: 0; left: 100px; right: 100px; height: 60px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 40px; z-index: 90; background: rgba(85, 107, 72, 0.8);
+            backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: right 0.6s;
+        }
+        .top-bar.full-width { right: 0; }
+
+        /* Skill Bars */
+        .bar-bg { background: rgba(255, 255, 255, 0.1); height: 8px; border-radius: 10px; margin-top: 8px; overflow: hidden;}
+        /* Skill Bar Glowing */
+        .bar-fill {
+            background: var(--accent-pink) !important;
+            height: 100%;
+            width: 0; /* Harus mulai dari 0 */
+            transition: width 1.5s ease-out !important;
+            box-shadow: 0 0 10px var(--accent-pink);
+            border-radius: 10px;
+        }
+
+        /* Hobby Grid Images */
+        .hobby-card { background: rgba(255,255,255,0.05); border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
+        .hobby-card:hover { transform: translateY(-5px); border-color: var(--accent-pink); }
+        .hobby-img { width: 100%; height: 90px; object-fit: cover; opacity: 0.8; }
+
+        /* Table Style */
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 15px; }
+        th { border-bottom: 2px solid var(--accent-pink); color: var(--accent-pink); padding: 10px; text-align: left; }
+        td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+        /* --- UPDATE WIREFRAME LINK: JADI MINI & PRESISI --- */
+        .wireframe-link {
+            /* 1. Pengaturan Tengah & Ukuran */
+            display: inline-flex; /* Biar kotaknya PAS sama isi (mini) */
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center;
+            
+            /* 2. Padding Tipis agar Mini */
+            padding: 4px 12px; /* Atas-Bawah tipis, Kiri-Kanan cukup */
+            margin-top: 5px; /* Jarak dari label 'UI DESIGN' */
+            
+            /* 3. Kotak Dashed Mini */
+            border: 1px dashed rgba(255, 197, 211, 0.4); 
+            border-radius: 8px; /* Sudut agak bulat */
+            
+            /* 4. Gaya Teks & Transisi */
+            text-decoration: none;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            
+            /* 5. Transparansi tipis biar aesthetic */
+            background: rgba(255, 197, 211, 0.03); 
+        }
+
+        /* Ikon & Teks di dalam WIREFRAME */
+        .wireframe-link i {
+            font-size: 0.75rem; /* Icon dikecilkan sedikit */
+            margin-bottom: 2px;
+            color: var(--accent-pink);
+        }
+
+        .wireframe-link span {
+            font-size: 0.5rem; /* Teks dikecilkan sedikit */
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+
+        /* EFEK HOVER WIREFRAME MINI */
+        .wireframe-link:hover {
+            background: rgba(255, 197, 211, 0.15);
+            border: 1px solid var(--accent-pink); /* Jadi lurus pas di-hover */
+            color: var(--accent-pink);
+            transform: scale(1.05); /* Membesar sedikit pas di-hover */
+        }
+
+        /* Footer */
+        #sec-4 {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 120px; 
+        }
+
+        /* Container untuk 3 Card Proyek */
+        .projects-wrapper {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 30px; 
             width: 100%;
+            max-width: 1100px; 
+            margin-top: 20px;
+        }
+
+        /* Card Proyek Modern */
+        .project-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden; 
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        /* Efek Hover Card Proyek */
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--accent-pink);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Wadah Gambar Proyek */
+        .project-img-box {
+            width: 100%;
+            height: 180px; 
+            overflow: hidden;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Gambar Proyek Jelas & Tajam */
+        .project-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            opacity: 0.9;
+            transition: 0.5s ease;
+        }
+
+        /* Hover Gambar Zoom In */
+        .project-card:hover .project-img-box img {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        /* Keterangan Teks di dalam Card */
+        .project-details {
+            padding: 20px;
+            text-align: left;
+        }
+
+        .project-title {
+            font-size: 1rem;
+            color: var(--accent-pink);
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .project-desc {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        .tech-tag {
+            display: inline-block;
+            background: rgba(255, 197, 211, 0.15);
+            color: var(--accent-pink);
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 0.6rem;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .footer { 
+            position: absolute;
+            bottom: 20px; 
+            width: 100%; 
+            text-align: center; 
+            font-size: 0.6rem; 
+            letter-spacing: 2px; 
+            opacity: 0.3; 
+            transition: opacity 0.5s ease;
+        }
+
+        .footer:hover {
+            opacity: 0.8;
+        }
+
+        .btn-home-new {
+            position: fixed;
+            bottom: 30px;
+            right: 150px; 
+            width: 130px; 
+            height: 40px; 
+            
+            /* GLASSMORPHISM */
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 197, 211, 0.2);
+            border-radius: 30px; 
+            
+            color: white;
+            display: none; 
+            opacity: 0;
+            transform: translateY(10px);
+            
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            z-index: 99999;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* EFEK MUNCUL */
+        .btn-home-new.show {
+            display: flex !important;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* EFEK HOVER BERCAHAYA */
+        .btn-home-new:hover {
+            background: rgba(255, 197, 211, 0.15);
+            border-color: var(--accent-pink);
+            box-shadow: 0 0 15px rgba(255, 105, 180, 0.2);
+            transform: scale(1.05);
+            color: var(--accent-pink);
+        }
+
+        .btn-home-new i {
+            font-size: 0.8rem;
+            color: var(--accent-pink);
+        }
+
+        /* Animasi Masuk */
+        @keyframes popIn {
+            from { transform: scale(0) rotate(-180deg); opacity: 0; }
+            to { transform: scale(1) rotate(0); opacity: 1; }
+        }
+        .pop-in { animation: popIn 0.5s forwards; }
+
+        /* --- Update Style for Gallery Lightbox (Slider) --- */
+        .lightbox-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.95); 
+            backdrop-filter: blur(10px);
+            display: none; 
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; 
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Tampilkan overlay */
+        .lightbox-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Kontainer untuk foto dan panah */
+        .lightbox-content {
             position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden; /* Penting agar efek blur tidak meluber */
+            width: 90%;
+            height: 90%;
+            max-width: 1100px;
+        }
+
+        /* Foto Besar di Tengah */
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; 
+            border-radius: 15px;
+            border: 4px solid var(--accent-pink);
+            box-shadow: 0 0 40px rgba(255, 197, 211, 0.3);
+            
+            animation: slideIn 0.4s ease;
+        }
+
+        /* Tombol Panah (Kanan/Kiri) */
+        .lightbox-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 197, 211, 0.1);
+            color: var(--accent-pink);
+            border: 1px solid rgba(255, 197, 211, 0.3);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
             cursor: pointer;
-            text-align: center;
+            transition: all 0.3s ease;
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* Sidebar */
-        .sidebar-left, .sidebar-right { position: fixed; top: 0; width: 10%; height: 100vh; background: var(--sidebar-color); z-index: 100; display: flex; flex-direction: column; }
-        .sidebar-left { left: 0; border-right: 1px solid rgba(255,255,255,0.1); }
-        .sidebar-right { right: 0; border-left: 1px solid rgba(255,255,255,0.1); writing-mode: vertical-rl; transform: rotate(180deg); align-items: center; justify-content: center; color: var(--accent-gold); font-size: 0.7rem; letter-spacing: 3px; }
-        .nav-item { flex: 1; display: flex; align-items: center; justify-content: center; writing-mode: vertical-rl; transform: rotate(180deg); cursor: pointer; font-size: 0.8rem; letter-spacing: 3px; color: #b0c0a8; transition: 0.4s; }
-        .nav-item:hover, .nav-item.active { background: rgba(0,0,0,0.1); color: var(--accent-gold); }
-
-        /* Konten */
-        .main-content { 
-            position: fixed; /* Mengunci posisi agar tidak perlu scroll */
-            top: 0; 
-            left: 10%; /* Sesuai lebar sidebar kiri */
-            width: 80%; /* Sisa lebar layar (100% - 10% kiri - 10% kanan) */
-            height: 100vh; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            padding: 50px;
-            z-index: 10;
+        .lightbox-btn:hover {
+            background: rgba(255, 197, 211, 0.3);
+            transform: translateY(-50%) scale(1.1);
+            border-color: var(--accent-pink);
         }
-        #home-screen { text-align: center; }
-        .content-display { display: none; gap: 40px; padding: 40px; background: rgba(255,255,255,0.05); border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); align-items: center; }
-        .content-display.active { display: flex; }
-        
-        /* About Style */
-        .photo-frame { flex: 0 0 300px; height: 400px; border: 8px solid var(--sidebar-color); outline: 1px solid var(--accent-gold); overflow: hidden; }
-        .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
-        .text-info { flex: 1; }
 
-        /* Hobby Style */
-        .hobby-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .hobby-card { border: 1px solid rgba(197, 160, 89, 0.2); padding: 15px; border-radius: 10px; }
-        .hobby-photos { display: flex; gap: 8px; margin-top: 10px; }
-        .mini-photo { width: 60px; height: 60px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
-        .mini-photo img { width: 100%; height: 100%; object-fit: cover; }
+        /* Posisi Panah Kiri dan Kanan */
+        .lightbox-prev { left: 20px; }
+        .lightbox-next { right: 20px; }
 
-        /* Journey Style */
-        .journey-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .journey-table th { color: var(--accent-gold); padding: 10px; border-bottom: 2px solid var(--accent-gold); }
-        .journey-table td { padding: 12px; border-bottom: 1px solid #ffffff0d; }
+        /* Tombol Tutup (X) */
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px; 
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+            z-index: 100000;
+            display: inline-block; 
+        }
 
-        @media (max-width: 768px) {
-            .sidebar-left, .sidebar-right {
-                display: none !important;
-            }
-            .main-content {
-                margin: 0 !important;
-                padding: 20px !important;
-                position: relative !important;
-                width: 100% !important;
-            }
-            .nav-tabs {
-                flex-direction: row;
-                gap: 15px !important;
-            }
-            .tab-item {
-                font-size: 1rem !important;
-            }
-            .content-display {
-                display: none; /* Tetap sembunyi secara default */
-                flex-direction: column !important; /* Paksa menumpuk */
-                align-items: center !important;    /* Paksa tengah */
-                justify-content: flex-start !important;
-                gap: 20px !important;
-                padding: 20px !important;
-            }
-            .content-display.active {
-                display: flex !important;
-            }
-            .photo-frame {
-                flex: 0 0 200px !important;
-                width: 100% !important; 
-                max-width: 300px !important;
-                height: 250px !important;
-            }
-            .hobby-grid {
-                grid-template-columns: 1fr !important;
-            }
+        /* EFEK PUTAR SAAT DI-HOVER */
+        .lightbox-close:hover {
+            opacity: 1;
+            color: var(--accent-pink);
+            transform: rotate(180deg) scale(1.2); 
+            filter: drop-shadow(0 0 10px var(--accent-pink)); 
+        }
+
+        /* Animasi Slide In untuk Foto Baru */
+        @keyframes slideIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .top-right a i {
+            transition: all 0.3s ease; 
+            display: inline-block; 
+        }
+
+        .top-right a:active i {
+            color: var(--accent-pink) !important; 
+            transform: scale(1.3); 
+            
+            filter: drop-shadow(0 0 8px var(--accent-pink)) 
+                    drop-shadow(0 0 3px white);
+        }
+
+        /* Animasi Kedip (Pulse) */
+        @keyframes pulse-green {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.5; filter: drop-shadow(0 0 5px #4CAF50); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .online-dot {
+            display: inline-block;
+            color: #4CAF50;
+            animation: pulse-green 2s infinite ease-in-out;
+            margin-right: 5px;
+        }
+
+        .info-box {
+            display: flex;
+            justify-content: space-between; 
+            align-items: center;           
+            padding: 10px 0;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;           
+            gap: 8px;                      
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: #2ecc71;
+            border-radius: 50%;
+            position: relative;
+            display: block;                
+        }
+
+        .dot::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #2ecc71;
+            border-radius: 50%;
+            z-index: -1;
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+
+        .status-text {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #ffffff;
+            line-height: 1;                
+        }
+
+        .project-img-box img {
+            position: relative;
+            z-index: 5; 
+            pointer-events: auto !important;
+            transition: transform 0.3s ease;
+        }
+
+        .project-img-box img:hover {
+            transform: scale(1.05); 
+        }
+
+        #lightbox-gallery {
+            pointer-events: auto;
+        }
+
+        #lightbox-gallery[style*="display: none"] {
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
 
-    <section class="page-one" onclick="document.getElementById('halaman2').scrollIntoView({behavior: 'smooth'})">
-        <div class="background-container"></div>
-        
-        <div class="overlay" style="position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.3); z-index: 0;"></div>
-    </section>
+    <div class="top-bar" id="top-bar">
+        <div style="font-size: 0.7rem; letter-spacing: 3px; font-weight: bold; color: var(--accent-pink);">AULIA</div>
+        <div class="top-right">
+            <a href="https://github.com/aulianurulafiza" target="_blank" style="color:white; margin-left:20px; text-decoration: none;"><i class="fab fa-github"></i></a>
+            <a href="https://instagram.com/aull.nrll" target="_blank" style="color:white; margin-left:20px; text-decoration: none;"><i class="fab fa-instagram"></i></a>
+        </div>
+    </div>
 
     <div class="sidebar-left">
         <div class="nav-item" onclick="showSection(0)">ABOUT</div>
         <div class="nav-item" onclick="showSection(1)">HOBBY</div>
         <div class="nav-item" onclick="showSection(2)">JOURNEY</div>
+        <div class="nav-item" onclick="showSection(3)">SKILLS</div>
+        <div class="nav-item" onclick="showSection(4)">PROJECTS</div>
     </div>
-    <div class="sidebar-right"><span>UIB - SISTEM INFORMASI</span></div>
+    
+    <div class="sidebar-right" id="sidebar-right">
+        <div class="glass-panel-right">
+            
+            <div class="info-box status-wrapper">
+                <span class="info-label">STATUS</span>
+                <div class="status-indicator">
+                    <span class="dot"></span>
+                    <span class="status-text">ONLINE</span>
+                </div>
+            </div>
 
-    <section class="main-content">
-        <div id="home-screen"><h1 style="font-family: 'Playfair Display', serif; font-size: 4rem;">AULIA NURUL AFIZA</h1></div>
+            <div class="info-box">
+                <span class="info-label">LOCAL TIME</span>
+                <div id="clock" style="font-weight: bold; font-size: 0.9rem;">00:00</div>
+            </div>
+
+            <div class="info-box">
+                <span class="info-label">STUDENT</span>
+                UIB / SEM 02<br>
+                <span style="opacity: 0.7; font-size: 0.6rem;">Information Systems</span>
+            </div>
+
+            <div class="info-box">
+                <span class="info-label">UI DESIGN</span>
+                <a href="URL_DRIVE_KAMU" target="_blank" class="wireframe-link">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>WIREFRAME</span>
+                </a>
+            </div>
+
+        </div> 
+    </div>
+
+    <button class="back-btn" id="back-btn" onclick="resetHome()">← BACK TO HOME</button>
+
+    <section class="main-content" id="main-scroll">
+        <div id="home-screen" class="content-display">
+            <h1 style="font-family: 'Playfair Display', serif; font-size: 4.5rem; text-align: center;">AULIA NURUL AFIZA</h1>
+        </div>
 
         <div class="content-display" id="sec-0">
-            <div class="photo-frame"><img src="biodata/fotoaulia.jpeg"></div>
-            <div class="text-info">
-                <h3>About Me</h3>
-                <p>Halo! Saya Aulia Nurul Afiza, mahasiswi Sistem Informasi UIB. Lahir di Batam, 11 Juni 2007. Saya sangat tertarik dengan teknologi dan analisis data.</p>
+            <div class="glass-card">
+                <div style="display: flex; gap: 40px; align-items: center;">
+                    <img src="aulaulia.jpeg" style="width: 200px; height: 260px; object-fit: cover; border: 3px solid var(--accent-pink); border-radius: 20px;">
+                    <div>
+                        <h3 style="color: var(--accent-pink); font-size: 1.8rem;">About Me</h3>
+                        <p style="margin-top: 15px; line-height: 1.7; opacity: 0.9;">Hi! I'm Aulia Nurul Afiza, an Information Systems student at UIB. Born in Batam, June 11, 2007. I'm 18 years old and deeply interested in technology, UI/UX design, and data analysis.</p>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="content-display" id="sec-1">
-            <div class="text-info">
-                <h3 style="margin-bottom: 20px;">My Personal Hobbies</h3>
-                <div class="hobby-grid">
-                    <div class="hobby-card"><h4>✈️ Travelling</h4>
-                         <p style="font-size: 0.8rem; color: #bbb;">Menciptakan memori di setiap destinasi.</p>
-                        <div class="hobby-photos"><div class="mini-photo"><img src="biodata/jalan1.jpeg"></div><div class="mini-photo"><img src="biodata/jalan2.jpeg"></div><div class="mini-photo"><img src="biodata/jalan3.jpeg"></div></div></div>
-                    <div class="hobby-card"><h4>🎵 Musik</h4>
-                         <p style="font-size: 0.8rem; color: #bbb;">Melodi teman terbaik saat belajar.</p>
-                        <div class="hobby-photos"><div class="mini-photo"><img src="biodata/lagu1.png"></div><div class="mini-photo"><img src="biodata/lagu2.png"></div><div class="mini-photo"><img src="biodata/lagu3.png"></div></div></div>
-                    <div class="hobby-card"><h4>🎬 Film/Series</h4>
-                        <p style="font-size: 0.8rem; color: #bbb;">Menikmati alur cerita inspiratif.</p>
-                        <div class="hobby-photos"><div class="mini-photo"><img src="biodata/film1.jpg"></div><div class="mini-photo"><img src="biodata/film2.jpg"></div><div class="mini-photo"><img src="biodata/film3.jpg"></div></div></div>
-                    <div class="hobby-card"><h4>🍜 Kuliner</h4>
-                          <p style="font-size: 0.8rem; color: #bbb;">Menjelajahi cita rasa unik.</p>
-                        <div class="hobby-photos"><div class="mini-photo"><img src="biodata/makan1.jpeg"></div><div class="mini-photo"><img src="biodata/makan2.jpeg"></div><div class="mini-photo"><img src="biodata/makan3.jpeg"></div></div></div>
+            <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+                
+                <h3 style="color: var(--accent-pink); margin-bottom: 10px; text-align: center; letter-spacing: 2px; text-transform: uppercase;">My Daily Vibes</h3>
+                <p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 30px; text-align: center;">Things that keep me creative and inspired outside of college life.</p>
+                
+                <div class="projects-wrapper">
+    
+                    <div class="project-card">
+                        <div class="project-img-box">
+                            <img src="jalan1.jpeg" onclick="openAlbum('traveling', 0)" style="cursor: zoom-in;">
+                        </div>
+                        <div class="project-details">
+                            <h4 class="project-title"><i class="fas fa-plane"></i> Traveling</h4>
+                            <p class="project-desc">Exploring Batam and beyond. Click to see more photos!</p>
+                            <span class="tech-tag">3 Photos Available</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-img-box">
+                            <img src="lagu1.png" onclick="openAlbum('music', 0)" style="cursor: zoom-in;">
+                        </div>
+                        <div class="project-details">
+                            <h4 class="project-title"><i class="fas fa-music"></i> Music</h4>
+                            <p class="project-desc">My daily soundtrack. Click to see what I'm listening to!</p>
+                            <span class="tech-tag">3 Photos Available</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-img-box">
+                            <img src="makan1.jpeg" onclick="openAlbum('culinary', 0)" style="cursor: zoom-in;">
+                        </div>
+                        <div class="project-details">
+                            <h4 class="project-title"><i class="fas fa-utensils"></i> Culinary</h4>
+                            <p class="project-desc">Food hunting with my besties. Click to see our favorites!</p>
+                            <span class="tech-tag">3 Photos Available</span>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
 
         <div class="content-display" id="sec-2">
-            <div class="text-info">
-                <h3>My Journey</h3>
-                <table class="journey-table">
-                    <tr><th>Tahun</th><th>Institusi</th><th>Ket</th></tr>
-                    <tr><td>2013-2019</td><td>SDN 008 SEKUPANG</td><td>-</td></tr>
-                    <tr><td>2019-2022</td><td>SMP IT NURUL MUHAJIRIN</td><td>-</td></tr>
-                    <tr><td>2022-2025</td><td>SMAN 1 BATAM</td><td>IPS</td></tr>
-                    <tr><td>2025-Sekarang</td><td>UIB</td><td>S1 Sistem Informasi</td></tr>
+            <div class="glass-card">
+                <h3 style="color: var(--accent-pink); margin-bottom: 10px;">Educational Journey</h3>
+                <table>
+                    <tr><th>Year</th><th>Institution</th><th>Description</th></tr>
+                    <tr><td>2013 - 2019</td><td>SD Negeri 008 Batam</td><td>-</td></tr>
+                    <tr><td>2019 - 2022</td><td>SMP IT Nurul Muhajirin</td><td>-</td></tr>
+                    <tr><td>2022 - 2025</td><td>SMAN 1 Batam</td><td>Social Science</td></tr>
+                    <tr><td>2025 - Now</td><td>Batam Internasioanl University</td><td>S1 Information Systems</td></tr>
                 </table>
             </div>
         </div>
+
+        <div class="content-display" id="sec-3">
+            <div class="glass-card">
+                <h3 style="color: var(--accent-pink); margin-bottom: 25px;">My Skills</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+                    <div>
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem;"><span>Python & Pygame</span><span>65%</span></div>
+                            <div class="bar-bg"><div class="bar-fill" data-percent="65%"></div></div>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem;"><span>HTML & CSS</span><span>70%</span></div>
+                            <div class="bar-bg"><div class="bar-fill" data-percent="70%"></div></div>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem;"><span>SQL & Database</span><span>75%</span></div>
+                            <div class="bar-bg"><div class="bar-fill" data-percent="75%"></div></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem;"><span>UI/UX Design (Figma)</span><span>80%</span></div>
+                            <div class="bar-bg"><div class="bar-fill" data-percent="80%"></div></div>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem;"><span>Canva & Photoshop</span><span>85%</span></div>
+                            <div class="bar-bg"><div class="bar-fill" data-percent="85%"></div></div>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem;"><span>Linux Admin</span><span>70%</span></div>
+                            <div class="bar-bg"><div class="bar-fill" data-percent="70%"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-display" id="sec-4">
+            
+            <h3 style="color: var(--accent-pink); margin-bottom: 10px; text-align: center; letter-spacing: 2px; text-transform: uppercase; font-size: 1.3rem;">Selected Projects</h3>
+            <p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 30px; text-align: center; max-width: 600px;">A showcased gallery of my academic & personal development work, combining code, design, and creativity.</p>
+            
+            <div class="projects-wrapper">
+    
+                <div class="project-card">
+                    <div class="project-img-box">
+                        <img src="game_python.jpg" onclick="openAlbum('game', 0)" style="cursor: zoom-in;">
+                    </div>
+                    <div class="project-details">
+                        <h4 class="project-title">Feed the Cat: Mini Game</h4>
+                        <p class="project-desc">2D mini-game development focusing on core programming logic.</p>
+                        <span class="tech-tag">Using Python & Pygame</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-img-box">
+                        <img src="apk.png" onclick="openAlbum('ui', 0)" style="cursor: zoom-in;">
+                    </div>
+                    <div class="project-details">
+                        <h4 class="project-title">FoodFlow: Delivery App UI</h4>
+                        <p class="project-desc">Clean and modern interface for a food ordering application.</p>
+                        <span class="tech-tag">UI/UX Design in Figma</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-img-box">
+                        <img src="poster.jpg" onclick="openAlbum('poster', 0)" style="cursor: zoom-in;">
+                    </div>
+                    <div class="project-details">
+                        <h4 class="project-title">Digital Poster: Creative Exploration</h4>
+                        <p class="project-desc"> A collection of academic posters exploring diverse themes, from vibrant concert visuals to gender equality.</p>
+                        <span class="tech-tag">3 Designs - Canva & Photoshop</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <footer class="footer">
+                <p>© 2026 Aulia Nurul Afiza <i class="fa fa-heart" style="color: var(--accent-pink);"></i></p>
+            </footer>
+        </div>
     </section>
 
-    <div class="social-links" style="position:fixed; bottom:20px; right:20px; z-index:1000; display: flex; gap: 20px;">
-        <a href="https://www.instagram.com/aull.nrll?igsh=eGExaHpocXJwZmhr" target="_blank" style="color:var(--accent-gold); transition: 0.3s;">
-            <i class="fab fa-instagram fa-2x"></i>
-        </a>
-        <a href="https://github.com/aulianurulafiza/aulianurul.github.io" target="_blank" style="color:var(--accent-gold); transition: 0.3s;">
-            <i class="fab fa-github fa-2x"></i>
-        </a>
-    </div>
-
     <script>
-        function showSection(index) {
-            const home = document.getElementById('home-screen');
-            const contents = document.querySelectorAll('.content-display');
-            const navs = document.querySelectorAll('.nav-item');
-            
-            // Cek apakah konten yang dipilih sudah aktif
-            const isAlreadyActive = contents[index].classList.contains('active');
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+        }
+        setInterval(updateClock, 1000); updateClock();
 
-            // Reset semua
-            contents.forEach(c => c.classList.remove('active'));
-            navs.forEach(n => n.classList.remove('active'));
-            
-            if (!isAlreadyActive) {
-                home.style.display = 'none'; // Sembunyikan home
-                contents[index].classList.add('active'); // Tampilkan konten pilihan
-                navs[index].classList.add('active'); // Tandai menu aktif
-            } else {
-                home.style.display = 'block'; // Jika diklik lagi, balikkan ke home
+        const albums = {
+            traveling: ["jalan1.jpeg", "jalan2.jpeg", "jalan3.jpeg"],
+            music: ["lagu1.png", "lagu2.png", "lagu3.png"],
+            culinary: ["makan1.jpeg", "makan2.jpeg", "makan3.jpeg"],
+            game: ["game_python.jpg"],
+            ui: ["apk.png"],
+            poster: ["poster.jpg", "poster2.jpeg", "poster3.jpg"] 
+        };
+
+        let currentAlbum = [];
+        let currentIndex = 0;
+
+        function openAlbum(category, index) {
+            if (!albums[category]) return;
+
+            const homeBtn = document.getElementById('floating-home');
+            if (homeBtn) {
+                homeBtn.style.display = 'none'; 
+                homeBtn.classList.remove('show');
             }
+
+            currentAlbum = albums[category];
+            currentIndex = index;
+
+            const lightbox = document.getElementById('lightbox-gallery');
+            const btns = document.querySelectorAll('.lightbox-btn');
+
+            if (currentAlbum.length <= 1) {
+                btns.forEach(b => b.style.visibility = 'hidden');
+            } else {
+                btns.forEach(b => b.style.visibility = 'visible');
+            }
+
+            updateLightboxImage();
+            
+            lightbox.style.display = 'flex';
+        }
+
+        function updateLightboxImage() {
+            const img = document.getElementById('lightbox-gallery-img');
+            const counter = document.getElementById('image-counter');
+            img.src = currentAlbum[currentIndex];
+            counter.innerText = (currentIndex + 1) + " / " + currentAlbum.length;
+        }
+
+        function closeGalleryLightbox() {
+            document.getElementById('lightbox-gallery').style.display = 'none';
+            
+            const homeBtn = document.getElementById('floating-home');
+            if (homeBtn) homeBtn.style.visibility = 'visible';
+        }
+
+        function changeImage(direction) {
+            currentIndex += direction;
+            if (currentIndex < 0) currentIndex = currentAlbum.length - 1;
+            else if (currentIndex >= currentAlbum.length) currentIndex = 0;
+            updateLightboxImage();
+        }
+
+        const mainScroll = document.getElementById('main-scroll');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        mainScroll.addEventListener('scroll', () => {
+            const homeBtn = document.getElementById('floating-home');
+            const sections = ['sec-0', 'sec-1', 'sec-2', 'sec-3', 'sec-4'];
+    
+            if (mainScroll.scrollTop > 150) {
+                if (homeBtn) {
+                    homeBtn.style.display = 'flex'; 
+                    setTimeout(() => {
+                        homeBtn.classList.add('show');
+                    }, 10);
+                }
+            } else {
+                if (homeBtn) {
+                    homeBtn.classList.remove('show');
+                    setTimeout(() => {
+                        if (!homeBtn.classList.contains('show')) {
+                            homeBtn.style.display = 'none';
+                        }
+                    }, 600);
+                }
+            }
+
+            sections.forEach((id, index) => {
+                const section = document.getElementById(id);
+                if (!section) return;
+                
+                const rect = section.getBoundingClientRect();
+
+                if (rect.top >= -300 && rect.top <= 300) {
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    if (navItems[index]) {
+                        navItems[index].classList.add('active');
+                    }
+
+                    if (id === 'sec-3') {
+                        const fills = section.querySelectorAll('.bar-fill');
+                        fills.forEach(bar => {
+                            bar.style.width = bar.getAttribute('data-percent');
+                        });
+                    }
+                }
+            });
+        });
+
+        function showSection(index) {
+            const homeBtn = document.getElementById('floating-home');
+            const mainScroll = document.getElementById('main-scroll');
+
+            if (index === 0) {
+                mainScroll.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+                
+                if (homeBtn) homeBtn.style.display = 'none';
+                
+                navItems.forEach(nav => nav.classList.remove('active'));
+            } else {
+                const targetId = `sec-${index}`;
+                const element = document.getElementById(targetId);
+
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                }
+
+                if (homeBtn) {
+                    homeBtn.style.display = 'flex';
+                    homeBtn.classList.add('pop-in');
+                }
+            }
+        }
+
+        function resetHome() {
+            document.getElementById('home-screen').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('sidebar-right').classList.remove('hidden');
+            document.getElementById('main-scroll').classList.remove('full-width');
+            document.getElementById('top-bar').classList.remove('full-width');
+            document.getElementById('back-btn').style.display = 'none';
+            navItems.forEach(nav => nav.classList.remove('active'));
         }
     </script>
 
-    <footer style="text-align:center; padding:40px 20px; color:rgba(255,255,255,0.5);">
-        <p>&copy; 2026 Aulia Nurul Afiza</p>
-        <small>Built with Code & Matcha | Sistem Informasi UIB</small>
-    </footer>
+    <div id="lightbox-gallery" onclick="closeGalleryLightbox()" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(10px); display: none; justify-content: center; align-items: center; z-index: 99999;">
+        <span class="lightbox-close" onclick="closeGalleryLightbox()" style="position: absolute; top: 30px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
+
+        <div class="lightbox-content" style="position: relative; display: flex; justify-content: center; align-items: center; width: 90%; max-width: 900px;" onclick="event.stopPropagation()">
+            <button class="lightbox-btn" onclick="changeImage(-1)" style="position: absolute; left: -60px; background: none; border: 1px solid var(--accent-pink); color: var(--accent-pink); border-radius: 50%; width: 50px; height: 50px; cursor: pointer;">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            
+            <div style="text-align: center;">
+                <img src="" id="lightbox-gallery-img" style="max-width: 100%; max-height: 80vh; border-radius: 15px; border: 3px solid var(--accent-pink); box-shadow: 0 0 30px rgba(255,197,211,0.3);">
+                <div id="image-counter" style="color: white; margin-top: 15px; font-size: 0.8rem; letter-spacing: 2px;">1 / 3</div>
+            </div>
+
+            <button class="lightbox-btn" onclick="changeImage(1)" style="position: absolute; right: -60px; background: none; border: 1px solid var(--accent-pink); color: var(--accent-pink); border-radius: 50%; width: 50px; height: 50px; cursor: pointer;">
+                <i class="fas fa-chevron-right"></i>
+            </button> 
+        </div>
+    </div>
+
+    <div id="floating-home" class="btn-home-new" onclick="showSection(0)">
+        <i class="fas fa-chevron-up"></i>
+        <span>BACK TO TOP</span>
+    </div>
 </body>
 </html>
