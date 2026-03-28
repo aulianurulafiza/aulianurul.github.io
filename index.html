@@ -11,35 +11,62 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Poppins', sans-serif; background: var(--bg-color); color: var(--text-color); overflow: hidden; }
 
-        /* Sidebar Left - Glowing Line */
-        .sidebar-left { 
-            position: fixed; left: 0; top: 0; width: 100px; height: 100vh; 
-            background: var(--sidebar-color); z-index: 100; 
-            display: flex; flex-direction: column; 
-            border-right: 1px solid rgba(255,255,255,0.1); 
-        }
-        /* Sidebar Left Item */
-        .nav-item { 
-            flex: 1; display: flex; align-items: center; justify-content: center; 
-            writing-mode: vertical-rl; transform: rotate(180deg);
-            cursor: pointer; font-size: 0.75rem; letter-spacing: 2px; color: #b0c0a8; 
-            transition: 0.4s; position: relative;
-        }
-
-        /* Garis Pink Bercahaya */
-        .nav-item::after {
-            content: ''; position: absolute; bottom: 0; left: 0; width: 4px; height: 0;
-            background: var(--accent-pink); 
-            box-shadow: 0 0 15px var(--accent-pink), 0 0 5px white; /* Efek Cahaya */
-            transition: height 0.5s ease;
+        /* Sidebar Left */
+        .sidebar-left {
+            position: fixed;
+            top: 0;         /* Nempel mentok atas */
+            bottom: 0;      /* Nempel mentok bawah */
+            left: 0;        /* Nempel mentok kiri */
+            width: 110px;   /* LEBAR DISAMAIN DENGAN SIDEBAR KANAN */
+            height: 100vh;  /* Tinggi full layar */
+            display: flex;
+            flex-direction: column;
+            
+            /* STYLE KACA (GLASSMORPHISM) */
+            background: rgba(255, 255, 255, 0.02); 
+            backdrop-filter: blur(15px);
+            border-right: 1px solid rgba(255, 255, 255, 0.05); /* Skat kanan halus */
+            z-index: 1000;
         }
 
-        /* Saat Aktif */
-        .nav-item.active { color: var(--accent-pink); background: rgba(255,197,211,0.05); }
-        .nav-item.active::after { 
-            height: 100%; 
-            background: var(--accent-pink);
-            box-shadow: 0 0 15px var(--accent-pink);
+        .nav-item {
+            flex: 1; /* Membagi rata tinggi sidebar untuk 8 menu */
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Teks horizontal di tengah kotak */
+            cursor: pointer;
+            font-size: 0.75rem; 
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            
+            writing-mode: horizontal-tb;
+            transform: none;
+            font-style: normal;
+            
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Hapus skat di item paling bawah */
+        .nav-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Efek saat Mouse di atas Menu (Hover) */
+        .nav-item:hover {
+            background: rgba(255, 197, 211, 0.05);
+            color: var(--accent-pink);
+        }
+
+        /* EFEK MENU AKTIF (LAMPU INDIKATOR) */
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            /* Garis pink tegas di sisi kiri untuk nandain halaman */
+            border-left: 5px solid var(--accent-pink); 
+            box-shadow: inset 15px 0 25px rgba(255, 197, 211, 0.03);
         }
 
         /* Sidebar Right */
@@ -53,26 +80,24 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center; /* KUNCI: Biar melayang di tengah layar */
+            justify-content: center; 
             gap: 15px; 
-            background-image: url('bgkanan.jpg'); /* Pastikan baris ini ada agar fotonya muncul */
+            background-image: url('biodata/bgkanan.jpg'); 
             background-size: cover;
             background-position: center;
             transition: transform 0.6s ease-in-out, opacity 0.6s ease;
         }
 
-        /* Lapisan Gelap (Overlay) di atas foto biar teks terbaca */
         .sidebar-right::before {
             content: '';
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5); /* Hitam transparan 50% */
-            z-index: 1; /* Di bawah teks, di atas foto */
+            background: rgba(0, 0, 0, 0.5); 
+            z-index: 1;
         }
 
-        /* Logika Sembunyi yang Diperbaiki */
         .sidebar-right.hidden { 
-            transform: translateX(100%); /* Geser penuh ke kanan */
-            opacity: 0; /* Menghilang halus */
+            transform: translateX(100%); 
+            opacity: 0; 
         }
 
         /* --- SINGLE GLASS CARD CONTAINER --- */
@@ -83,14 +108,12 @@
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 197, 211, 0.2);
             border-radius: 15px;
-            padding: 20px 0; /* Padding atas bawah saja, kiri-kanan 0 biar flex yang atur */
-            
+            padding: 20px 0; 
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Tengah vertikal */
-            align-items: center;     /* KUNCI: Tengah horizontal */
+            justify-content: center; 
+            align-items: center;     
             gap: 20px; 
-            
             position: relative;
             z-index: 2;
         }
@@ -98,10 +121,10 @@
         /* --- KOTAK INFO DI DALAMNYA --- */
         .info-box { 
             width: 100%; 
-            display: flex;          /* Tambahkan flex di sini juga */
+            display: flex;          
             flex-direction: column; 
-            align-items: center;    /* Paksa semua isi (teks/icon) ke tengah */
-            text-align: center;     /* Ratatengah untuk teks multi-baris */
+            align-items: center;    
+            text-align: center;     
             padding: 0 5px; 
             font-size: 0.65rem;
         }
@@ -116,7 +139,7 @@
             text-transform: uppercase;
         }
 
-        /* --- Tambahan: Animasi Titik Online Kedip --- */
+        /* --- Animasi Titik Online Kedip --- */
         @keyframes pulse-green {
             0% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.2); opacity: 0.5; filter: drop-shadow(0 0 3px #4CAF50); }
@@ -132,8 +155,8 @@
 
         /* Main Scroll Area */
         .main-content { 
-            margin-left: 100px;   /* Jarak permanen buat sidebar kiri */
-            margin-right: 110px;  /* Jarak permanen buat sidebar kanan (biar gak nabrak foto/glass) */
+            margin-left: 100px;   
+            margin-right: 110px;  
             height: 100vh; 
             overflow-y: auto; 
             scroll-behavior: smooth; 
@@ -192,40 +215,31 @@
         th { border-bottom: 2px solid var(--accent-pink); color: var(--accent-pink); padding: 10px; text-align: left; }
         td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
-        /* --- UPDATE WIREFRAME LINK: JADI MINI & PRESISI --- */
+        /* WIREFRAME */
         .wireframe-link {
-            /* 1. Pengaturan Tengah & Ukuran */
-            display: inline-flex; /* Biar kotaknya PAS sama isi (mini) */
+            display: inline-flex; 
             flex-direction: column;
             align-items: center; 
             justify-content: center;
-            
-            /* 2. Padding Tipis agar Mini */
-            padding: 4px 12px; /* Atas-Bawah tipis, Kiri-Kanan cukup */
-            margin-top: 5px; /* Jarak dari label 'UI DESIGN' */
-            
-            /* 3. Kotak Dashed Mini */
+            padding: 4px 12px; 
+            margin-top: 5px; 
             border: 1px dashed rgba(255, 197, 211, 0.4); 
-            border-radius: 8px; /* Sudut agak bulat */
-            
-            /* 4. Gaya Teks & Transisi */
+            border-radius: 8px; 
             text-decoration: none;
             color: var(--text-color);
             transition: all 0.3s ease;
-            
-            /* 5. Transparansi tipis biar aesthetic */
             background: rgba(255, 197, 211, 0.03); 
         }
 
         /* Ikon & Teks di dalam WIREFRAME */
         .wireframe-link i {
-            font-size: 0.75rem; /* Icon dikecilkan sedikit */
+            font-size: 0.75rem; 
             margin-bottom: 2px;
             color: var(--accent-pink);
         }
 
         .wireframe-link span {
-            font-size: 0.5rem; /* Teks dikecilkan sedikit */
+            font-size: 0.5rem; 
             letter-spacing: 1px;
             opacity: 0.9;
         }
@@ -233,9 +247,9 @@
         /* EFEK HOVER WIREFRAME MINI */
         .wireframe-link:hover {
             background: rgba(255, 197, 211, 0.15);
-            border: 1px solid var(--accent-pink); /* Jadi lurus pas di-hover */
+            border: 1px solid var(--accent-pink); 
             color: var(--accent-pink);
-            transform: scale(1.05); /* Membesar sedikit pas di-hover */
+            transform: scale(1.05); 
         }
 
         /* Footer */
@@ -607,15 +621,18 @@
         </div>
     </div>
 
-    <div class="sidebar-left">
+    <aside class="sidebar-left">
         <div class="nav-item" onclick="showSection(0)">ABOUT</div>
         <div class="nav-item" onclick="showSection(1)">HOBBY</div>
         <div class="nav-item" onclick="showSection(2)">JOURNEY</div>
         <div class="nav-item" onclick="showSection(3)">SKILLS</div>
         <div class="nav-item" onclick="showSection(4)">PROJECTS</div>
-    </div>
+        <div class="nav-item" onclick="showSection(5)">EXPERIENCE</div>
+        <div class="nav-item" onclick="showSection(6)">GOALS</div>      
+        <div class="nav-item" onclick="showSection(7)">TECH STACK</div> 
+    </aside>
     
-    <div class="sidebar-right" id="sidebar-right">
+    <aside class="sidebar-right" id="sidebar-right">
         <div class="glass-panel-right">
             
             <div class="info-box status-wrapper">
@@ -646,7 +663,7 @@
             </div>
 
         </div> 
-    </div>
+    </aside>
 
     <button class="back-btn" id="back-btn" onclick="resetHome()">← BACK TO HOME</button>
 
@@ -770,12 +787,12 @@
     
                 <div class="project-card">
                     <div class="project-img-box">
-                        <img src="game_python.jpg" onclick="openAlbum('game', 0)" style="cursor: zoom-in;">
+                        <img src="biodata/game.jpeg" onclick="openAlbum('game', 0)" style="cursor: zoom-in;">
                     </div>
                     <div class="project-details">
                         <h4 class="project-title">Feed the Cat: Mini Game</h4>
                         <p class="project-desc">2D mini-game development focusing on core programming logic.</p>
-                        <span class="tech-tag">Using Python & Pygame</span>
+                        <span class="tech-tag">Group - Using Python & Pygame</span>
                     </div>
                 </div>
 
@@ -800,9 +817,62 @@
                         <span class="tech-tag">3 Designs - Canva & Photoshop</span>
                     </div>
                 </div>
-
             </div>
+        </div>
+        
+        <div class="content-display" id="sec-5">
+            <div class="glass-card">
+                <h3 style="color: var(--accent-pink); margin-bottom: 20px;">Experience</h3>
+                <div style="border-left: 2px solid var(--accent-pink); padding-left: 20px; margin-left: 5px;">
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="font-size: 1rem; color: white;">Community Service Project</h4>
+                        <p style="font-size: 0.7rem; opacity: 0.6;">Batam, 2026</p>
+                        <p style="font-size: 0.85rem; margin-top: 5px;">Memberikan bimbingan edukasi dan motivasi untuk remaja lokal sebagai bentuk kontribusi sosial mahasiswa UIB.</p>
+                    </div>
+                    <div>
+                        <h4 style="font-size: 1rem; color: white;">Personal Project Dev</h4>
+                        <p style="font-size: 0.7rem; opacity: 0.6;">2025 - Present</p>
+                        <p style="font-size: 0.85rem; margin-top: 5px;">Aktif membangun portofolio berbasis web dan mengelola repositori GitHub untuk dokumentasi koding.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <div class="content-display" id="sec-6">
+            <div class="glass-card">
+                <h3 style="color: var(--accent-pink); margin-bottom: 20px;">Career Roadmap</h3>
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div style="background: rgba(255, 255, 255, 0.05); padding: 10px 15px; border-radius: 8px;">
+                        <span style="color: var(--accent-pink); font-weight: bold;">2026:</span> Student Exchange (Singapore/Korea)
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); padding: 10px 15px; border-radius: 8px;">
+                        <span style="color: var(--accent-pink); font-weight: bold;">2027:</span> Deep Dive into Cybersecurity
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); padding: 10px 15px; border-radius: 8px;">
+                        <span style="color: var(--accent-pink); font-weight: bold;">2031:</span> Lead Web Developer / Cyber Expert
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-display" id="sec-7">
+            <div class="glass-card">
+                <h3 style="color: var(--accent-pink); margin-bottom: 20px;">Tech Stack & Gear</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div style="background: rgba(255, 255, 255, 0.03); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                        <i class="fas fa-laptop" style="color: var(--accent-pink);"></i> <span style="font-size: 0.8rem;">ASUS Gaming Series</span>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.03); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                        <i class="fas fa-database" style="color: var(--accent-pink);"></i> <span style="font-size: 0.8rem;">MySQL Workbench</span>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.03); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                        <i class="fas fa-code" style="color: var(--accent-pink);"></i> <span style="font-size: 0.8rem;">VS Code & Python</span>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.03); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                        <i class="fab fa-figma" style="color: var(--accent-pink);"></i> <span style="font-size: 0.8rem;">Figma & Canva</span>
+                    </div>
+                </div>
+            </div>
             <footer class="footer">
                 <p>© 2026 Aulia Nurul Afiza <i class="fa fa-heart" style="color: var(--accent-pink);"></i></p>
             </footer>
@@ -820,7 +890,7 @@
             traveling: ["biodata/jalan1.jpeg", "biodata/jalan2.jpeg", "biodata/jalan3.jpeg"],
             music: ["biodata/lagu1.png", "biodata/lagu2.png", "biodata/lagu3.png"],
             culinary: ["biodata/makan1.jpeg", "biodata/makan2.jpeg", "biodata/makan3.jpeg"],
-            game: ["game_python.jpg"],
+            game: ["biodata/game.jpeg"],
             ui: ["biodata/apk.png"],
             poster: ["biodata/poster.jpg", "biodata/poster2.jpeg", "poster3.jpg"] 
         };
@@ -880,7 +950,7 @@
 
         mainScroll.addEventListener('scroll', () => {
             const homeBtn = document.getElementById('floating-home');
-            const sections = ['sec-0', 'sec-1', 'sec-2', 'sec-3', 'sec-4'];
+            const sections = ['sec-0', 'sec-1', 'sec-2', 'sec-3', 'sec-4', 'sec-5', 'sec-6', 'sec-7'];
     
             if (mainScroll.scrollTop > 150) {
                 if (homeBtn) {
@@ -900,63 +970,64 @@
                 }
             }
 
-            sections.forEach((id, index) => {
-                const section = document.getElementById(id);
-                if (!section) return;
-                
-                const rect = section.getBoundingClientRect();
+            const scrollPos = mainScroll.scrollTop;
 
-                if (rect.top >= -300 && rect.top <= 300) {
-                    navItems.forEach(nav => nav.classList.remove('active'));
-                    if (navItems[index]) {
-                        navItems[index].classList.add('active');
-                    }
+            if (scrollPos < 100) {
+                navItems.forEach(nav => nav.classList.remove('active'));
+            } else {
+                sections.forEach((id, index) => {
+                    const section = document.getElementById(id);
+                    if (!section) return;
+                    
+                    const rect = section.getBoundingClientRect();
 
-                    if (id === 'sec-3') {
-                        const fills = section.querySelectorAll('.bar-fill');
-                        fills.forEach(bar => {
-                            bar.style.width = bar.getAttribute('data-percent');
-                        });
+                    if (rect.top >= -200 && rect.top <= 200) {
+                        navItems.forEach(nav => nav.classList.remove('active'));
+                        if (navItems[index]) {
+                            navItems[index].classList.add('active');
+                        }
+
+                        if (id === 'sec-3') {
+                            const fills = section.querySelectorAll('.bar-fill');
+                            fills.forEach(bar => {
+                                bar.style.width = bar.getAttribute('data-percent');
+                            });
+                        }
                     }
-                }
-            });
+                });
+            }
         });
 
         function showSection(index) {
-            const homeBtn = document.getElementById('floating-home');
-            const mainScroll = document.getElementById('main-scroll');
+            const targetId = `sec-${index}`;
+            const element = document.getElementById(targetId);
 
-            if (index === 0) {
-                mainScroll.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-                
-                if (homeBtn) homeBtn.style.display = 'none';
-                
-                navItems.forEach(nav => nav.classList.remove('active'));
-            } else {
-                const targetId = `sec-${index}`;
-                const element = document.getElementById(targetId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
 
-                if (element) {
-                    element.scrollIntoView({ behavior: 'smooth' });
-                }
-
-                if (homeBtn) {
-                    homeBtn.style.display = 'flex';
-                    homeBtn.classList.add('pop-in');
-                }
+            // Update lampu menu
+            navItems.forEach(nav => nav.classList.remove('active'));
+            if (navItems[index]) {
+                navItems[index].classList.add('active');
             }
         }
 
         function resetHome() {
-            document.getElementById('home-screen').scrollIntoView({ behavior: 'smooth' });
-            document.getElementById('sidebar-right').classList.remove('hidden');
-            document.getElementById('main-scroll').classList.remove('full-width');
-            document.getElementById('top-bar').classList.remove('full-width');
-            document.getElementById('back-btn').style.display = 'none';
+            const mainScroll = document.getElementById('main-scroll');
+            
+            mainScroll.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+
             navItems.forEach(nav => nav.classList.remove('active'));
+            
+            const homeBtn = document.getElementById('floating-home');
+            if (homeBtn) {
+                homeBtn.classList.remove('show');
+                setTimeout(() => homeBtn.style.display = 'none', 600);
+            }
         }
     </script>
 
@@ -979,7 +1050,7 @@
         </div>
     </div>
 
-    <div id="floating-home" class="btn-home-new" onclick="showSection(0)">
+    <div id="floating-home" class="btn-home-new" onclick="resetHome()">
         <i class="fas fa-chevron-up"></i>
         <span>BACK TO TOP</span>
     </div>
