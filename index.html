@@ -210,8 +210,18 @@
 
         /* Table Style */
         table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 15px; }
-        th { border-bottom: 2px solid var(--accent-pink); color: var(--accent-pink); padding: 10px; text-align: left; }
-        td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        th { 
+            border-bottom: 2px solid var(--accent-pink); 
+            color: var(--accent-pink); 
+            padding: 10px; 
+            text-align: center; /* GANTI DARI left KE center */
+        }
+       td { 
+            padding: 10px; 
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+            text-align: center; /* TAMBAHKAN INI agar isi tabel juga di tengah */
+            vertical-align: middle; /* Biar teks bener-bener di tengah secara vertikal */
+        }
 
         /* WIREFRAME */
         .wireframe-link {
@@ -654,7 +664,7 @@
 
             <div class="info-box">
                 <span class="info-label">UI DESIGN</span>
-                <a href="URL_DRIVE_KAMU" target="_blank" class="wireframe-link">
+                <a href="biodata/WIREFRAME.pdf" target="_blank" class="wireframe-link">
                     <i class="fas fa-project-diagram"></i>
                     <span>WIREFRAME</span>
                 </a>
@@ -718,7 +728,7 @@
                         </div>
                         <div class="project-details">
                             <h4 class="project-title"><i class="fas fa-utensils"></i> Culinary</h4>
-                            <p class="project-desc">Food hunting with my besties. Click to see my favorites!</p>
+                            <p class="project-desc">Chasing flavors and making memories. Click to see my favorites!</p>
                             <span class="tech-tag">3 Photos Available</span>
                         </div>
                     </div>
@@ -729,13 +739,13 @@
 
         <div class="content-display" id="sec-2">
             <div class="glass-card">
-                <h3 style="color: var(--accent-pink); margin-bottom: 10px;">Educational Journey</h3>
+                <h3 style="color: var(--accent-pink); margin-bottom: 10px;">My Educational Journey</h3>
                 <table>
                     <tr><th>Year</th><th>Institution</th><th>Description</th></tr>
                     <tr><td>2013 - 2019</td><td>SD Negeri 008 Batam</td><td>-</td></tr>
                     <tr><td>2019 - 2022</td><td>SMP IT Nurul Muhajirin</td><td>-</td></tr>
                     <tr><td>2022 - 2025</td><td>SMAN 1 Batam</td><td>Social Science</td></tr>
-                    <tr><td>2025 - Now</td><td>Batam Internasioanl University</td><td>S1 Information Systems</td></tr>
+                    <tr><td>2025 - Now</td><td>Universitas Internasional Batam</td><td>S1 Information Systems</td></tr>
                 </table>
             </div>
         </div>
@@ -823,14 +833,25 @@
                 <h3 style="color: var(--accent-pink); margin-bottom: 20px;">Experience</h3>
                 <div style="border-left: 2px solid var(--accent-pink); padding-left: 20px; margin-left: 5px;">
                     <div style="margin-bottom: 20px;">
-                        <h4 style="font-size: 1rem; color: white;">Community Service Project</h4>
-                        <p style="font-size: 0.7rem; opacity: 0.6;">Batam, 2026</p>
-                        <p style="font-size: 0.85rem; margin-top: 5px;">Memberikan bimbingan edukasi dan motivasi untuk remaja lokal sebagai bentuk kontribusi sosial mahasiswa UIB.</p>
+                        <h4 style="font-size: 1rem; color: white;">Quranic Tutor (Volunteer)</h4>
+                        <p style="font-size: 0.7rem; opacity: 0.6;">2021</p>
+                        <p style="font-size: 0.85rem; margin-top: 5px;">
+                            Dedicated time to teaching <b>Quranic recitation</b> and basic religious guidance to children at the local mushola.
+                        </p>
                     </div>
-                    <div>
-                        <h4 style="font-size: 1rem; color: white;">Personal Project Dev</h4>
-                        <p style="font-size: 0.7rem; opacity: 0.6;">2025 - Present</p>
-                        <p style="font-size: 0.85rem; margin-top: 5px;">Aktif membangun portofolio berbasis web dan mengelola repositori GitHub untuk dokumentasi koding.</p>
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="font-size: 1rem; color: white;">School Event Committee</h4>
+                        <p style="font-size: 0.7rem; opacity: 0.6;">2023</p>
+                        <p style="font-size: 0.85rem; margin-top: 5px;">
+                            Contributed to the <i>Music & Choreography</i> division, responsible for arranging musical elements and dance movements for class performances.
+                        </p>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="font-size: 1rem; color: white;">PBA GURINDAM Event Committee</h4>
+                        <p style="font-size: 0.7rem; opacity: 0.6;">2025</p>
+                        <p style="font-size: 0.85rem; margin-top: 5px;">
+                            Served as a <u>Participant Coordinator</u> (Calling Riders), ensuring all contestants were prepared and organized before entering the competition arena.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -840,14 +861,21 @@
             <div class="glass-card">
                 <h3 style="color: var(--accent-pink); margin-bottom: 20px;">Career Roadmap</h3>
                 <div style="display: flex; flex-direction: column; gap: 15px;">
-                    <div style="background: rgba(255, 255, 255, 0.05); padding: 10px 15px; border-radius: 8px;">
-                        <span style="color: var(--accent-pink); font-weight: bold;">2026:</span> Student Exchange (Singapore/Korea)
+                    <div style="background: rgba(255, 255, 255, 0.05); padding: 10px 15px; border-radius: 8px; margin-bottom: 10px;">
+                        <span style="color: var(--accent-pink); font-weight: bold;">2026:</span> 
+                        Attending <abbr title="Web & App Development">Tech Seminars</abbr> to enhance professional coding skills.
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); padding: 10px 15px; border-radius: 8px; margin-bottom: 10px;">
+                        <span style="color: var(--accent-pink); font-weight: bold;">2027:</span> 
+                        Participating in the <b>Student Exchange Program</b> (Singapore/South Korea).
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); padding: 10px 15px; border-radius: 8px; margin-bottom: 10px;">
+                        <span style="color: var(--accent-pink); font-weight: bold;">2028:</span> 
+                        Successfully <u>Graduating</u> with a Bachelor's Degree in Information Systems.
                     </div>
                     <div style="background: rgba(255, 255, 255, 0.05); padding: 10px 15px; border-radius: 8px;">
-                        <span style="color: var(--accent-pink); font-weight: bold;">2027:</span> Deep Dive into Cybersecurity
-                    </div>
-                    <div style="background: rgba(255, 255, 255, 0.05); padding: 10px 15px; border-radius: 8px;">
-                        <span style="color: var(--accent-pink); font-weight: bold;">2031:</span> Lead Web Developer / Cyber Expert
+                        <span style="color: var(--accent-pink); font-weight: bold;">2029:</span> 
+                        Starting a professional career as a <b>Web Developer</b>.
                     </div>
                 </div>
             </div>
