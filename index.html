@@ -14,11 +14,11 @@
         /* Sidebar Left */
         .sidebar-left {
             position: fixed;
-            top: 0;         /* Nempel mentok atas */
-            bottom: 0;      /* Nempel mentok bawah */
-            left: 0;        /* Nempel mentok kiri */
-            width: 110px;   /* LEBAR DISAMAIN DENGAN SIDEBAR KANAN */
-            height: 100vh;  /* Tinggi full layar */
+            top: 0;         
+            bottom: 0;     
+            left: 0;       
+            width: 110px;   
+            height: 100vh;  
             display: flex;
             flex-direction: column;
             
@@ -30,10 +30,10 @@
         }
 
         .nav-item {
-            flex: 1; /* Membagi rata tinggi sidebar untuk 8 menu */
+            flex: 1; 
             display: flex;
             align-items: center;
-            justify-content: center; /* Teks horizontal di tengah kotak */
+            justify-content: center; 
             cursor: pointer;
             font-size: 0.75rem; 
             font-weight: bold;
@@ -49,12 +49,10 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Hapus skat di item paling bawah */
         .nav-item:last-child {
             border-bottom: none;
         }
 
-        /* Efek saat Mouse di atas Menu (Hover) */
         .nav-item:hover {
             background: rgba(255, 197, 211, 0.05);
             color: var(--accent-pink);
@@ -675,7 +673,7 @@
         <div class="content-display" id="sec-0">
             <div class="glass-card">
                 <div style="display: flex; gap: 40px; align-items: center;">
-                    <img src="biodata/fotoaulia.jpeg" style="width: 200px; height: 260px; object-fit: cover; border: 3px solid var(--accent-pink); border-radius: 20px;">
+                    <img src="biodata/aulcafe2.jpeg" style="width: 200px; height: 260px; object-fit: cover; border: 3px solid var(--accent-pink); border-radius: 20px;">
                     <div>
                         <h3 style="color: var(--accent-pink); font-size: 1.8rem;">About Me</h3>
                         <p style="margin-top: 15px; line-height: 1.7; opacity: 0.9;">Hi! I'm Aulia Nurul Afiza, an Information Systems student at UIB. Born in Batam, June 11, 2007. I'm 18 years old and deeply interested in technology, UI/UX design, and data analysis.</p>
@@ -698,19 +696,19 @@
                         </div>
                         <div class="project-details">
                             <h4 class="project-title"><i class="fas fa-plane"></i> Traveling</h4>
-                            <p class="project-desc">Exploring Batam and beyond. Click to see more photos!</p>
+                            <p class="project-desc">Exploring new horizons and beyond. Click to see more photos!</p>
                             <span class="tech-tag">3 Photos Available</span>
                         </div>
                     </div>
 
                     <div class="project-card">
                         <div class="project-img-box">
-                            <img src="biodata/film1.jpg" onclick="openAlbum('movies', 0)" style="cursor: zoom-in;">
+                            <img src="biodata/film1(crop).jpg" onclick="openAlbum('movies', 0)" style="cursor: zoom-in;">
                         </div>
                         <div class="project-details">
                             <h4 class="project-title"><i class="fas fa-film"></i> Movies</h4>
-                            <p class="project-desc">Getting lost in <u>cinematic</u> worlds and visual storytelling. I find beauty in every frame.</p>
-                            <span class="tech-tag">New Favorites Added</span>
+                            <p class="project-desc">Getting lost in cinematic worlds and visual storytelling. Click to see the movies!</p>
+                            <span class="tech-tag">3 Favorites Added</span>
                         </div>
                     </div>
 
@@ -720,7 +718,7 @@
                         </div>
                         <div class="project-details">
                             <h4 class="project-title"><i class="fas fa-utensils"></i> Culinary</h4>
-                            <p class="project-desc">Food hunting with my besties. Click to see our favorites!</p>
+                            <p class="project-desc">Food hunting with my besties. Click to see my favorites!</p>
                             <span class="tech-tag">3 Photos Available</span>
                         </div>
                     </div>
@@ -787,7 +785,7 @@
     
                 <div class="project-card">
                     <div class="project-img-box">
-                        <img src="biodata/game.jpeg" onclick="openAlbum('game', 0)" style="cursor: zoom-in;">
+                        <img src="biodata/game(crop).jpeg" onclick="openAlbum('game', 0)" style="cursor: zoom-in;">
                     </div>
                     <div class="project-details">
                         <h4 class="project-title">Feed the Cat: Mini Game</h4>
@@ -814,7 +812,7 @@
                     <div class="project-details">
                         <h4 class="project-title">Digital Poster: Creative Exploration</h4>
                         <p class="project-desc"> A collection of academic posters exploring diverse themes, from vibrant concert visuals to gender equality.</p>
-                        <span class="tech-tag">3 Designs - Canva & Photoshop</span>
+                        <span class="tech-tag">2 Designs - Canva & Photoshop</span>
                     </div>
                 </div>
             </div>
@@ -892,7 +890,7 @@
             culinary: ["biodata/makan1.jpeg", "biodata/makan2.jpeg", "biodata/makan3.jpeg"],
             game: ["biodata/game.jpeg"],
             ui: ["biodata/apk.png"],
-            poster: ["biodata/poster.jpg", "biodata/poster2.jpeg", "poster3.jpg"] 
+            poster: ["biodata/poster.jpg", "biodata/poster2.jpeg"] 
         };
 
         let currentAlbum = [];
