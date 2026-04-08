@@ -158,17 +158,18 @@
             height: 100vh; 
             overflow-y: auto; 
             scroll-behavior: smooth; 
-            scroll-snap-type: y mandatory; 
             scrollbar-width: none; 
-            -ms-overflow-style: none; 
+            -ms-overflow-style: none;
+            scroll-snap-type: y proximity; /* Ini magnetnya */
+            scroll-behavior: smooth;
         }
         .main-content::-webkit-scrollbar { display: none; }
         .main-content.full-width { margin-right: 0; }
 
         .content-display { 
-            min-height: 100vh; width: 100%; display: flex; 
+            min-height: 70vh; width: 100%; display: flex; 
             justify-content: center; align-items: center; 
-            scroll-snap-align: start; padding: 60px 40px; position: relative;
+            scroll-snap-align: center; padding: 100px 40px; position: relative;
         }
 
         /* Glass Card */
@@ -617,6 +618,27 @@
         #lightbox-gallery[style*="display: none"] {
             pointer-events: none;
         }
+
+        @media (max-height: 800px) {
+            .content-display {
+                min-height: 600px; /* Tinggi minimal yang tetap, bukan berdasarkan layar */
+                padding: 40px 20px;
+            }
+            
+            .glass-card {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 3rem !important; /* Perkecil judul di layar kecil */
+            }
+        }
+
+        @media (max-width: 1024px) {
+            #home-screen h1 {
+                font-size: 4rem !important; /* Ukuran cadangan kalau dibuka di layar lebih kecil */
+            }
+        }
     </style>
 </head>
 <body>
@@ -676,8 +698,10 @@
     <button class="back-btn" id="back-btn" onclick="resetHome()">← BACK TO HOME</button>
 
     <section class="main-content" id="main-scroll">
-        <div id="home-screen" class="content-display">
-            <h1 style="font-family: 'Playfair Display', serif; font-size: 4.5rem; text-align: center;">AULIA NURUL AFIZA</h1>
+        <div id="home-screen" class="content-display"style="display: flex; justify-content: center; align-items: center; text-align: center; min-height: 100vh;">
+            <h1 style="font-family: 'Playfair Display', serif; font-size: 12vw; text-align: center; white-space: nowrap;">
+                AULIA NURUL AFIZA
+            </h1>
         </div>
 
         <div class="content-display" id="sec-0">
@@ -884,7 +908,7 @@
         <div class="content-display" id="sec-7">
             <div class="glass-card">
                 <h3 style="color: var(--accent-pink); margin-bottom: 20px;">Tech Stack & Gear</h3>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div style="max-width: 500px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div style="background: rgba(255, 255, 255, 0.03); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
                         <i class="fas fa-laptop" style="color: var(--accent-pink);"></i> <span style="font-size: 0.8rem;">ASUS Gaming Series</span>
                     </div>
